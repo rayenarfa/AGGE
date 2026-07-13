@@ -1,0 +1,14 @@
+---
+url: "https://eage.org/education/calendar-learning-geoscience-self-paced-online-courses/"
+title: "Calendar - Learning Geoscience - Self-paced Online Courses - eage.org"
+---
+
+| AllSelf-paced Online CoursesDistinguished Lecturer WebinarsExtensive Online CoursesE-Lecture WebinarsInteractive Online Short CoursesE-Lecture RecordingsPartner CoursesHow-to-Videos<br>CategoryAllAllData ScienceEnergy TransitionEngineeringGeologyGeophysicsNear SurfaceReservoir CharacterizationTraining and Development<br>MonthAllAllJanuaryFebruaryMarchAprilMayJuneJulyAugustSeptemberOctoberNovemberDecember<br>Search<br>- Search in<br>- Dates<br>- Course Title<br>- Instructor<br>- Category<br>- Subcategory<br>- Registration<br>- Event Type<br>- Year<br>- Month<br>- Organizer<br>- Keywords |
+| --- |
+| Dates | Course Title | Instructor | Category | Subcategory | Registration | Event Type | Year | Month | Organizer | Keywords |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 00009On Demand | **[Carbonate Reservoir Characterization](https://learninggeoscience.org/mod/page/view.php?id=6627)**<br>_Self-paced Online Course_ | Dr Laura Galluccio | Geology | Carbonate Geology | [Register Now](https://learninggeoscience.org/mod/page/view.php?id=6627) | Self-paced Online Course | 2026 | July | EAGE | geology carbonate geology |
+| 00010On Demand | **[EET 13: Velocities, Imaging, and Waveform Inversion - The Evolution of Characterizing the Earth's Subsurface](https://learninggeoscience.org/mod/page/view.php?id=6621)**<br>_Self-paced Online Course_ | Dr Ian Jones | Geophysics | Seismic Processing | [Register Now](https://learninggeoscience.org/mod/page/view.php?id=6621) | Self-paced Online Course | 2026 | July | EAGE | geophysics seismic processing |
+| 00011On Demand | **[Geostatistical Reservoir Modeling](https://learninggeoscience.org/mod/page/view.php?id=6625)**<br>_Self-paced Online Course_ | Prof. Dario Grana | Geophysics | Seismic Reservoir Characterization | [Register Now](https://learninggeoscience.org/mod/page/view.php?id=6625) | Self-paced Online Course | 2026 | July | EAGE | geophysics seismic reservoir characterization |
+| 00012On Demand | **[Near Surface Modeling for Static Corrections](https://learninggeoscience.org/mod/page/view.php?id=6623)**<br>_Self-paced Online Course_ | Ralph Bridle | Near Surface | Environmental Geophysics | [Register Now](https://learninggeoscience.org/mod/page/view.php?id=6623) | Self-paced Online Course | 2026 | July | EAGE | near surface environmental geophysics |
+| 00013On Demand | **[EET: Beyond Conventional Seismic Imaging](https://learninggeoscience.org/mod/page/view.php?id=6617)**<br>_Self-paced Online Course_ | Evgeny Landa | Geophysics | Seismic Inversion and Imaging | [Register Now](https://learninggeoscience.org/mod/page/view.php?id=6617) | Self-paced Online Course | 2026 | July | EAGE | geophysics seismic inversion and imaging |
