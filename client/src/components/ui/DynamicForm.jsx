@@ -86,7 +86,7 @@ export default function DynamicForm({ formKey }) {
 
   if (errorMsg && !formDefinition) {
     return (
-      <div className="rounded-lg border border-red-500/20 bg-red-950/20 p-4 text-sm text-red-400">
+      <div className="rounded-lg border border-red-500/30 bg-red-50 p-4 text-sm text-red-800 font-medium">
         {errorMsg}
       </div>
     );
@@ -94,12 +94,12 @@ export default function DynamicForm({ formKey }) {
 
   if (success) {
     return (
-      <div className="rounded-xl border border-emerald-500/20 bg-emerald-950/10 p-6 text-center animate-fadeIn">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xl font-bold">
+      <div className="rounded-xl border border-emerald-500/30 bg-emerald-50 p-6 text-center animate-fadeIn shadow-sm">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xl font-bold">
           ✓
         </div>
-        <h4 className="text-lg font-bold text-white">Application Received!</h4>
-        <p className="mt-2 text-sm text-slate-300 max-w-md mx-auto">
+        <h4 className="text-lg font-bold text-emerald-900">Application Received!</h4>
+        <p className="mt-2 text-sm text-emerald-800 max-w-md mx-auto">
           Your details have been submitted and saved in our database. 
           Administrative staff will review your application status shortly.
         </p>
@@ -110,23 +110,23 @@ export default function DynamicForm({ formKey }) {
   return (
     <div className="space-y-4">
       {errorMsg && (
-        <div className="rounded-lg border border-red-500/20 bg-red-950/20 p-4 text-sm text-red-400">
+        <div className="rounded-lg border border-red-500/30 bg-red-50 p-4 text-sm text-red-800 font-medium">
           {errorMsg}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-slate-850 bg-slate-900/40 p-6 text-left">
+      <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-sandstone/30 bg-white p-6 shadow-md shadow-navy/5 text-left">
         <div>
-          <h4 className="text-base font-bold text-white">{formDefinition.title}</h4>
+          <h4 className="text-base font-bold text-navy font-display">{formDefinition.title}</h4>
           {formDefinition.description && (
-            <p className="text-xs text-slate-400 mt-1">{formDefinition.description}</p>
+            <p className="text-xs text-text-muted mt-1 font-sans">{formDefinition.description}</p>
           )}
         </div>
 
         {/* Guest Email Field */}
         {!user && (
-          <div className="pb-3 border-b border-slate-800/50">
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <div className="pb-3 border-b border-sandstone/25">
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-text-muted">
               Email Address <span className="text-red-500">*</span>
             </label>
             <input
@@ -135,19 +135,22 @@ export default function DynamicForm({ formKey }) {
               value={guestEmail}
               onChange={(e) => setGuestEmail(e.target.value)}
               placeholder="jane@example.com"
-              className="w-full rounded-lg border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
+              className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-sm text-navy transition focus:bg-white focus:border-copper focus:outline-none"
             />
-            <p className="mt-1 text-[10px] text-slate-500">Provide your contact email to track application progress.</p>
+            <p className="mt-1 text-[10px] text-text-muted">Provide your contact email to track application progress.</p>
           </div>
         )}
 
         {/* Dynamic Fields */}
         {formDefinition.fields.map((field) => {
           const isErr = !!fieldErrors[field.name];
+          const inputClass = `w-full rounded-lg border bg-sand-light/10 px-3 py-2 text-sm text-navy transition focus:bg-white focus:outline-none ${
+            isErr ? 'border-red-500/50 focus:border-red-500' : 'border-sandstone/45 focus:border-copper'
+          }`;
           
           return (
-            <div key={field.name}>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <div key={field.name} className="space-y-1">
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-text-muted">
                 {field.label || field.name} {field.required && <span className="text-red-500">*</span>}
               </label>
 
@@ -155,9 +158,7 @@ export default function DynamicForm({ formKey }) {
                 <select
                   value={formData[field.name] || ''}
                   onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-                  className={`w-full rounded-lg border bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none ${
-                    isErr ? 'border-red-500/50' : 'border-slate-700'
-                  }`}
+                  className={inputClass}
                 >
                   {field.options?.map((opt) => (
                     <option key={opt} value={opt}>
@@ -171,9 +172,7 @@ export default function DynamicForm({ formKey }) {
                   rows={3}
                   value={formData[field.name] || ''}
                   onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-                  className={`w-full rounded-lg border bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none ${
-                    isErr ? 'border-red-500/50' : 'border-slate-700'
-                  }`}
+                  className={inputClass}
                 />
               ) : (
                 <input
@@ -186,15 +185,13 @@ export default function DynamicForm({ formKey }) {
                       [field.name]: field.type === 'number' ? Number(e.target.value) || '' : e.target.value,
                     })
                   }
-                  className={`w-full rounded-lg border bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none ${
-                    isErr ? 'border-red-500/50' : 'border-slate-700'
-                  }`}
+                  className={inputClass}
                 />
               )}
 
               {/* Field specific error output */}
               {isErr && (
-                <p className="mt-1 text-xs font-semibold text-red-400">{fieldErrors[field.name]}</p>
+                <p className="mt-1 text-xs font-semibold text-red-500">{fieldErrors[field.name]}</p>
               )}
             </div>
           );
@@ -203,7 +200,7 @@ export default function DynamicForm({ formKey }) {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition disabled:opacity-50 cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-copper to-copper-light px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:scale-[1.02] transition shadow border-none cursor-pointer"
         >
           {submitting && <Spinner className="h-4 w-4 text-white" />}
           {submitting ? 'Submitting...' : 'Submit Application'}

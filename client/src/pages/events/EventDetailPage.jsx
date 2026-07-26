@@ -34,6 +34,9 @@ export default function EventDetailPage() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const registering = false;
+  const regSuccess = null;
+  const regError = null;
 
   useEffect(() => {
     async function fetchEventDetails() {
@@ -62,8 +65,8 @@ export default function EventDetailPage() {
     return (
       <div className="flex min-h-[calc(100vh-140px)] items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-800 border-t-emerald-500" />
-          <p className="text-sm text-slate-400">Loading event details...</p>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-sandstone/30 border-t-copper" />
+          <p className="text-sm text-text-muted">Loading event details...</p>
         </div>
       </div>
     );
@@ -72,9 +75,9 @@ export default function EventDetailPage() {
   if (error || !event) {
     return (
       <div className="mx-auto max-w-6xl px-6 py-20 text-center">
-        <h1 className="text-2xl font-bold text-white">Event not found</h1>
-        <p className="mt-2 text-sm text-slate-400">{error || 'This event does not exist.'}</p>
-        <Link to="/events" className="mt-4 inline-block text-emerald-400 hover:underline">
+        <h1 className="text-2xl font-bold text-navy">Event not found</h1>
+        <p className="mt-2 text-sm text-text-muted">{error || 'This event does not exist.'}</p>
+        <Link to="/events" className="mt-4 inline-block text-copper hover:underline font-semibold">
           Back to events
         </Link>
       </div>
@@ -109,7 +112,7 @@ export default function EventDetailPage() {
             
             {/* Image display if exists */}
             {event.imageUrl && (
-              <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+              <div className="overflow-hidden rounded-xl border border-sandstone/30 bg-white">
                 <img
                   src={event.imageUrl}
                   alt={event.title}
@@ -118,67 +121,67 @@ export default function EventDetailPage() {
               </div>
             )}
 
-            <div className="prose prose-invert max-w-none">
-              <p className="text-lg leading-relaxed text-slate-200 whitespace-pre-line">
+            <div className="prose max-w-none text-navy mt-6">
+              <p className="text-sm leading-relaxed text-text-muted whitespace-pre-line font-sans">
                 {event.description}
               </p>
             </div>
 
             {hasEarlyBird && (
-              <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
+              <div className="rounded-lg border border-amber-500/30 bg-amber-50 px-4 py-3 text-xs text-amber-800 font-medium">
                 Early bird rates available until {new Date(event.earlyBirdDeadline).toLocaleDateString()}
               </div>
             )}
             
             {event.abstractDeadline && (
-              <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-3 text-sm text-blue-300">
+              <div className="rounded-lg border border-blue-500/30 bg-blue-50 px-4 py-3 text-xs text-blue-800 font-medium">
                 Abstract submission deadline: {new Date(event.abstractDeadline).toLocaleDateString()}
               </div>
             )}
           </div>
 
           <aside className="space-y-6">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-              <h2 className="font-semibold text-white">Event Details</h2>
+            <div className="rounded-xl border border-sandstone/30 bg-white p-6 shadow-md shadow-navy/5">
+              <h2 className="font-semibold text-navy text-base">Event Details</h2>
               
-              <div className="mt-4 space-y-3 text-sm text-slate-300">
+              <div className="mt-4 space-y-3 text-xs text-text-muted">
                 <div>
-                  <span className="block text-xs text-slate-500 font-semibold uppercase tracking-wider">Date & Time</span>
-                  <span>{datesText}</span>
+                  <span className="block text-[10px] text-copper font-bold uppercase tracking-wider">Date & Time</span>
+                  <span className="text-navy font-semibold text-xs">{datesText}</span>
                 </div>
                 <div>
-                  <span className="block text-xs text-slate-500 font-semibold uppercase tracking-wider">Venue</span>
-                  <span>{event.online ? 'Online (Zoom/Teams)' : event.location}</span>
+                  <span className="block text-[10px] text-copper font-bold uppercase tracking-wider">Venue</span>
+                  <span className="text-navy font-semibold text-xs">{event.online ? 'Online (Zoom/Teams)' : event.location}</span>
                 </div>
                 {event.organizer && (
                   <div>
-                    <span className="block text-xs text-slate-500 font-semibold uppercase tracking-wider">Organizer</span>
-                    <span>{event.organizer}</span>
+                    <span className="block text-[10px] text-copper font-bold uppercase tracking-wider">Organizer</span>
+                    <span className="text-navy font-semibold text-xs">{event.organizer}</span>
                   </div>
                 )}
-                <div className="pt-2 border-t border-slate-800/60">
-                  <span className="block text-xs text-slate-500 font-semibold uppercase tracking-wider">Member Rate</span>
-                  <span className="text-lg font-bold text-white">
-                    {Number(event.priceMember) === 0 ? 'Free' : `${Number(event.priceMember).toFixed(2)} EUR`}
+                <div className="pt-3 border-t border-sandstone/20">
+                  <span className="block text-[10px] text-copper font-bold uppercase tracking-wider">Member Rate</span>
+                  <span className="text-base font-bold text-navy">
+                    {Number(event.priceMember) === 0 ? 'Free' : `€${Number(event.priceMember).toFixed(2)}`}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-xs text-slate-500 font-semibold uppercase tracking-wider">Non-Member Rate</span>
-                  <span className="text-lg font-bold text-slate-400">
-                    {Number(event.priceNonMember) === 0 ? 'Free' : `${Number(event.priceNonMember).toFixed(2)} EUR`}
+                  <span className="block text-[10px] text-copper font-bold uppercase tracking-wider">Non-Member Rate</span>
+                  <span className="text-base font-bold text-text-muted">
+                    {Number(event.priceNonMember) === 0 ? 'Free' : `€${Number(event.priceNonMember).toFixed(2)}`}
                   </span>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-6 pt-4 border-t border-slate-800/60">
+              <div className="mt-6 pt-4 border-t border-sandstone/20">
                 {regSuccess && (
-                  <div className="mb-4 text-xs text-emerald-400 font-medium bg-emerald-950/20 border border-emerald-500/10 p-3 rounded-lg">
+                  <div className="mb-4 text-xs text-emerald-750 font-medium bg-emerald-50 border border-emerald-300/30 p-3 rounded-lg">
                     {regSuccess}
                   </div>
                 )}
                 {regError && (
-                  <div className="mb-4 text-xs text-red-400 font-medium bg-red-950/20 border border-red-500/10 p-3 rounded-lg">
+                  <div className="mb-4 text-xs text-red-750 font-medium bg-red-50 border border-red-300/30 p-3 rounded-lg">
                     {regError}
                   </div>
                 )}
@@ -187,7 +190,7 @@ export default function EventDetailPage() {
                   <button
                     type="button"
                     disabled
-                    className="w-full rounded-lg bg-slate-800 border border-slate-700 py-2.5 text-sm font-semibold text-slate-500 cursor-not-allowed"
+                    className="w-full rounded-full bg-sand-light border-none py-2.5 text-xs font-bold uppercase tracking-wider text-text-muted cursor-not-allowed"
                   >
                     Past Event
                   </button>
@@ -195,7 +198,7 @@ export default function EventDetailPage() {
                   <button
                     type="button"
                     disabled
-                    className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 py-2.5 text-sm font-semibold text-emerald-400 cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 py-2.5 text-xs font-bold uppercase tracking-wider text-emerald-600 cursor-not-allowed"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -205,7 +208,7 @@ export default function EventDetailPage() {
                 ) : !user ? (
                   <Link
                     to="/login"
-                    className="block w-full text-center rounded-lg bg-slate-800 border border-slate-700 py-2.5 text-sm font-semibold text-emerald-400 hover:bg-slate-700/60 transition"
+                    className="block w-full text-center rounded-full bg-gradient-to-r from-copper to-copper-light py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:scale-[1.02] transition shadow border-none cursor-pointer"
                   >
                     Log In to Register
                   </Link>
@@ -214,26 +217,26 @@ export default function EventDetailPage() {
                     type="button"
                     onClick={handleRegister}
                     disabled={registering}
-                    className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 py-2.5 text-sm font-semibold text-white transition disabled:opacity-50 cursor-pointer"
+                    className="w-full rounded-full bg-gradient-to-r from-copper to-copper-light py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:scale-[1.02] transition shadow border-none cursor-pointer"
                   >
                     {registering ? 'Processing...' : 'Register Now'}
                   </button>
                 )}
 
                 {event.registrationDeadline && !isPast && !isRegistered && (
-                  <p className="mt-2 text-center text-[10px] text-slate-500">
+                  <p className="mt-2 text-center text-[10px] text-text-muted">
                     Registration closes on {new Date(event.registrationDeadline).toLocaleDateString()}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6">
-              <h3 className="font-semibold text-white text-sm">Policy Notes</h3>
-              <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+            <div className="rounded-xl border border-sandstone/30 bg-white p-6 shadow-md shadow-navy/5">
+              <h3 className="font-semibold text-navy text-sm">Policy Notes</h3>
+              <p className="mt-2 text-xs text-text-muted leading-relaxed">
                 Cancellations received in writing 14 days prior to event start qualify for full refunds. 
                 Read our full environmental stance under the{' '}
-                <Link to="/events/environmental-policy" className="text-emerald-400 hover:underline">
+                <Link to="/events/environmental-policy" className="text-copper hover:underline font-semibold">
                   Environmental Policy
                 </Link>
                 .

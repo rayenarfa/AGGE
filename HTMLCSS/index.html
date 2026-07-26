@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGGE — Association of Geosciences & Geo Engineering</title>
+  <meta name="description" content="Advancing knowledge, innovation, and collaboration in geosciences and geo-engineering worldwide.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN + Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0c1a2b',
+            'navy-mid': '#152a42',
+            'navy-light': '#1e3a56',
+            sand: '#d9cbb0',
+            sandstone: '#c4a57b',
+            'sand-light': '#ede4d3',
+            sage: '#7a9b76',
+            'sage-light': '#a3bf9f',
+            copper: '#b87333',
+            'copper-light': '#d4956a',
+            cream: '#f7f3ec',
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            display: ['"DM Serif Display"', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="flex flex-col min-h-screen bg-cream text-navy">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 transition-all duration-300 bg-navy/96 backdrop-blur shadow-lg border-b border-navy-light">
+    <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-4">
+      <a href="index.html" class="flex shrink-0 items-center gap-2">
+        <img src="https://agge.in/assets/images/resources/ColorAGGE_LOGO__2@4x.png" alt="AGGE Logo" class="h-11 transition-all" />
+      </a>
+      <nav class="hidden items-center gap-1 lg:flex">
+        <a href="index.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">Home</a>
+        <a href="about.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">About</a>
+        <a href="membership.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">Membership</a>
+        <a href="events.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">Events</a>
+        <a href="education.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">Education</a>
+        <a href="communities.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">Communities</a>
+        <a href="news.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">News</a>
+        <a href="media.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">Media</a>
+        <a href="contact.html" class="text-white hover:text-sand font-medium uppercase tracking-wider text-xs px-3 py-2 transition">Contact</a>
+      </nav>
+      <div class="flex shrink-0 items-center gap-3">
+        <a href="login.html" class="hidden rounded-full border border-white/45 px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-white/10 hover:scale-105 sm:inline-flex">Member Login</a>
+        <a href="register.html" class="rounded-full bg-gradient-to-r from-copper to-copper-light px-5 py-2 text-xs font-semibold text-white transition hover:scale-105 shadow-md shadow-copper/35">Join AGGE</a>
+        <button id="mobile-menu-btn" class="lg:hidden text-white hover:text-sand cursor-pointer text-xl p-1" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden lg:hidden bg-navy-mid border-t border-navy-light text-white animate-fadeIn absolute left-0 right-0 top-full shadow-xl">
+      <nav class="flex flex-col px-6 py-4 divide-y divide-navy-light">
+        <a href="index.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Home</a>
+        <a href="about.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">About</a>
+        <a href="membership.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Membership</a>
+        <a href="events.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Events</a>
+        <a href="education.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Education</a>
+        <a href="communities.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Communities</a>
+        <a href="students.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Students</a>
+        <a href="news.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">News</a>
+        <a href="media.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Media</a>
+        <a href="services.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Services</a>
+        <a href="contact.html" class="py-3 text-sm font-medium tracking-wide uppercase hover:text-sand block">Contact</a>
+        <div class="pt-4 flex flex-col gap-3">
+          <a href="login.html" class="rounded-full border border-white/30 text-center py-2 text-xs font-semibold hover:bg-white/5">Login</a>
+          <a href="register.html" class="rounded-full bg-copper text-center py-2 text-xs font-semibold hover:bg-copper-light">Join AGGE</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 page-transition-wrapper">
+    
+    <!-- Hero Section -->
+    <section class="relative bg-navy text-white py-24 px-6 overflow-hidden border-b-4 border-sandstone">
+      <div class="contour-bg opacity-30"></div>
+      <div class="mx-auto max-w-6xl relative z-10">
+        <div class="inline-flex items-center gap-2 rounded-full border border-sand/30 bg-navy-mid/60 px-4 py-1.5 text-xs text-sand font-medium mb-6 backdrop-blur">
+          <span class="h-2 w-2 rounded-full bg-copper animate-ping"></span>
+          <span>Global Geosciences &amp; Geo-Engineering Network</span>
+        </div>
+        <h1 class="font-display text-4xl sm:text-6xl font-normal leading-tight tracking-tight text-cream mb-6 max-w-3xl">
+          Advancing Geosciences &amp; Engineering for a Sustainable Planet
+        </h1>
+        <p class="text-slate-300 text-lg sm:text-xl max-w-2xl font-light leading-relaxed mb-8">
+          Fostering international collaboration, cutting-edge sub-surface research, continuing education, and sustainable natural resource engineering.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="membership.html" class="rounded-full bg-gradient-to-r from-copper to-copper-light px-8 py-3.5 text-sm font-bold text-white shadow-lg hover:scale-105 transition">
+            Become a Member <i class="fas fa-arrow-right ml-2 text-xs"></i>
+          </a>
+          <a href="events.html" class="rounded-full border border-white/40 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white hover:bg-white/15 transition backdrop-blur">
+            Explore Events
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Statistics -->
+    <section class="bg-navy-mid text-white py-10 border-b border-navy-light">
+      <div class="mx-auto max-w-6xl px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div>
+          <div class="text-3xl font-display text-sand font-bold">12,500+</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 mt-1">Global Members</div>
+        </div>
+        <div>
+          <div class="text-3xl font-display text-sand font-bold">45+</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 mt-1">Regional Chapters</div>
+        </div>
+        <div>
+          <div class="text-3xl font-display text-sand font-bold">180+</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 mt-1">Annual Conferences</div>
+        </div>
+        <div>
+          <div class="text-3xl font-display text-sand font-bold">4,000+</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 mt-1">Research Publications</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Four Pillars Section -->
+    <section class="py-20 px-6">
+      <div class="mx-auto max-w-6xl">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="font-display text-3xl font-bold text-navy mb-3">Our Core Pillars</h2>
+          <p class="text-slate-600 text-sm">Empowering professionals, researchers, and students through robust global initiatives.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-2xl p-8 shadow-sm border border-sand/40 hover:shadow-md transition">
+            <div class="h-12 w-12 rounded-xl bg-sand/30 flex items-center justify-center text-copper text-xl mb-6">
+              <i class="fas fa-globe-americas"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Global Community</h3>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">Connecting geoscientists, geophysicists, and engineers across continents to solve global geological challenges.</p>
+            <a href="communities.html" class="text-xs font-semibold text-copper hover:underline inline-flex items-center gap-1">Explore Chapters <i class="fas fa-chevron-right text-[10px]"></i></a>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-sm border border-sand/40 hover:shadow-md transition">
+            <div class="h-12 w-12 rounded-xl bg-sage/20 flex items-center justify-center text-sage text-xl mb-6">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Education &amp; Growth</h3>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">Continuous professional training, accredited courses, workshops, and student mentorship programs.</p>
+            <a href="education.html" class="text-xs font-semibold text-copper hover:underline inline-flex items-center gap-1">View Courses <i class="fas fa-chevron-right text-[10px]"></i></a>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-sm border border-sand/40 hover:shadow-md transition">
+            <div class="h-12 w-12 rounded-xl bg-copper/15 flex items-center justify-center text-copper text-xl mb-6">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Scientific Media</h3>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">Publishing peer-reviewed journals, technical newsletters, and industry standard publications.</p>
+            <a href="media.html" class="text-xs font-semibold text-copper hover:underline inline-flex items-center gap-1">Browse Media <i class="fas fa-chevron-right text-[10px]"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upcoming Events Banner -->
+    <section class="bg-navy text-white py-16 px-6 relative overflow-hidden">
+      <div class="contour-bg opacity-15"></div>
+      <div class="mx-auto max-w-6xl relative z-10">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
+          <div>
+            <h2 class="font-display text-3xl font-bold text-sand">Featured Global Events</h2>
+            <p class="text-xs text-slate-300 mt-1">Participate in world-class conferences, workshops, and webinars.</p>
+          </div>
+          <a href="events.html" class="rounded-full border border-sand/40 px-6 py-2.5 text-xs font-semibold text-sand hover:bg-sand hover:text-navy transition">
+            View All Events Calendar
+          </a>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-navy-mid border border-navy-light rounded-xl p-6 hover:border-sandstone transition">
+            <div class="flex items-center justify-between text-xs text-sand font-semibold mb-3">
+              <span class="uppercase tracking-wider">Annual Conference</span>
+              <span>OCT 14 - 17, 2026</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-2">International Geo-Engineering Summit 2026</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">Keynote sessions on AI in seismic processing, geothermal exploration, and environmental geotechnical solutions.</p>
+            <div class="flex items-center justify-between border-t border-navy-light pt-4 text-xs">
+              <span class="text-slate-400"><i class="fas fa-map-marker-alt text-copper mr-1"></i> Global Hybrid / Online</span>
+              <a href="events.html" class="text-sand font-semibold hover:underline">Register Now →</a>
+            </div>
+          </div>
+
+          <div class="bg-navy-mid border border-navy-light rounded-xl p-6 hover:border-sandstone transition">
+            <div class="flex items-center justify-between text-xs text-sand font-semibold mb-3">
+              <span class="uppercase tracking-wider">Technical Workshop</span>
+              <span>NOV 05, 2026</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-2">Subsurface Modeling &amp; Environmental Protection</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">Hands-on practical training using latest 3D geological mapping tools for subsurface risk management.</p>
+            <div class="flex items-center justify-between border-t border-navy-light pt-4 text-xs">
+              <span class="text-slate-400"><i class="fas fa-video text-sage mr-1"></i> Live Webinar</span>
+              <a href="events.html" class="text-sand font-semibold hover:underline">Register Now →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Join CTA -->
+    <section class="py-20 px-6 bg-gradient-to-b from-cream to-sand-light/50">
+      <div class="mx-auto max-w-4xl bg-white rounded-3xl p-10 md:p-14 shadow-lg border border-sand/40 text-center relative overflow-hidden">
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-navy mb-4">Join the Global AGGE Network Today</h2>
+        <p class="text-slate-600 text-sm max-w-xl mx-auto mb-8 leading-relaxed">
+          Gain access to peer-reviewed publications, discounted event registrations, global chapter networking, and career advancement programs.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="register.html" class="rounded-full bg-gradient-to-r from-copper to-copper-light px-8 py-3.5 text-sm font-bold text-white shadow-md hover:scale-105 transition">
+            Become a Member
+          </a>
+          <a href="membership.html" class="rounded-full border border-navy/20 px-8 py-3.5 text-sm font-semibold text-navy hover:bg-navy/5 transition">
+            Compare Membership Tiers
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-navy text-white/80 py-16 px-6 relative overflow-hidden border-t-8 border-sandstone">
+    <div class="contour-bg opacity-15"></div>
+    <div class="mx-auto max-w-6xl relative z-10">
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="space-y-4">
+          <div class="flex items-center gap-2.5">
+            <img src="https://agge.in/assets/images/resources/ColorAGGE_LOGO__2@4x.png" alt="AGGE Logo" class="h-12 brightness-0 invert" />
+            <div>
+              <p class="text-md font-display tracking-wider text-white">AGGE</p>
+              <p class="text-[10px] uppercase tracking-wider text-slate-400">Geosciences &amp; Geo Engineering</p>
+            </div>
+          </div>
+          <p class="text-xs leading-relaxed text-slate-400 mt-2">
+            Association of Geosciences and Geo Engineering — advancing knowledge, innovation, and collaboration in the global geoscience community.
+          </p>
+          <div class="flex gap-3 pt-2">
+            <a href="https://www.facebook.com/share/1BU57MkQVf/" target="_blank" rel="noreferrer" class="h-8 w-8 rounded-full border border-navy-light flex items-center justify-center hover:bg-copper hover:text-white transition" aria-label="Facebook">
+              <i class="fab fa-facebook-f text-sm"></i>
+            </a>
+            <a href="https://www.linkedin.com/company/association-of-geosciences-geo-engineering-agge/" target="_blank" rel="noreferrer" class="h-8 w-8 rounded-full border border-navy-light flex items-center justify-center hover:bg-copper hover:text-white transition" aria-label="LinkedIn">
+              <i class="fab fa-linkedin-in text-sm"></i>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase font-bold tracking-widest text-sand mb-4">Explore AGGE</h4>
+          <ul class="space-y-2.5">
+            <li><a href="students.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Students &amp; Early Career</a></li>
+            <li><a href="services.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Services</a></li>
+            <li><a href="communities.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Local Chapters</a></li>
+            <li><a href="events.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Event Calendar</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase font-bold tracking-widest text-sand mb-4">Membership</h4>
+          <ul class="space-y-2.5">
+            <li><a href="register.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Join AGGE</a></li>
+            <li><a href="membership.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Renew Membership</a></li>
+            <li><a href="membership.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Benefits</a></li>
+            <li><a href="membership.html" class="text-xs text-slate-400 hover:text-sand hover:underline transition">Membership Types</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase font-bold tracking-widest text-sand mb-4">Contact Info</h4>
+          <ul class="space-y-2.5 text-xs text-slate-400">
+            <li class="flex items-start gap-2">
+              <i class="fas fa-envelope text-sand mt-0.5"></i>
+              <a href="mailto:info@agge.in" class="hover:text-sand">info@agge.in</a>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-phone text-sand mt-0.5"></i>
+              <a href="tel:9526003346" class="hover:text-sand">+91 9526003346</a>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-map-marker-alt text-sand mt-0.5"></i>
+              <span>
+                Association of Geosciences &amp; Geo Engineering<br/>
+                Global Network and Regional Chapters
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-navy-light mt-12 pt-6 text-center text-[11px] text-slate-500">
+        <p>© <span id="copyright-year">2026</span> Association of Geosciences &amp; Geo Engineering. All rights reserved.</p>
+        <div class="flex justify-center gap-4 mt-2">
+          <a href="404.html" class="hover:text-sand">Disclaimer</a>
+          <span>•</span>
+          <a href="404.html" class="hover:text-sand">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

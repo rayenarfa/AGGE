@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — AGGE</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0c1a2b',
+            'navy-mid': '#152a42',
+            'navy-light': '#1e3a56',
+            sand: '#d9cbb0',
+            sandstone: '#c4a57b',
+            'sand-light': '#ede4d3',
+            sage: '#7a9b76',
+            'sage-light': '#a3bf9f',
+            copper: '#b87333',
+            'copper-light': '#d4956a',
+            cream: '#f7f3ec',
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            display: ['"DM Serif Display"', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="flex flex-col min-h-screen bg-cream text-navy">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 transition-all duration-300 bg-navy/96 backdrop-blur shadow-lg border-b border-navy-light">
+    <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-4">
+      <a href="index.html" class="flex shrink-0 items-center gap-2">
+        <img src="https://agge.in/assets/images/resources/ColorAGGE_LOGO__2@4x.png" alt="AGGE Logo" class="h-11 transition-all" />
+      </a>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-white bg-sage px-3 py-1 rounded-full font-bold">Admin Privileges Active</span>
+        <a href="dashboard.html" class="text-xs text-slate-300 hover:text-white">Member Dashboard</a>
+        <a href="index.html" class="text-xs text-red-400 hover:text-red-300">Exit Admin</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-12 px-6 page-transition-wrapper">
+    <div class="mx-auto max-w-6xl space-y-8">
+      
+      <!-- Admin Header -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 class="font-display text-3xl font-bold text-navy">AGGE Administrative Control Panel</h1>
+          <p class="text-xs text-slate-600">Manage member applications, event registrations, and publications.</p>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="alert('Create Event dialog opened')" class="rounded-full bg-navy text-white px-5 py-2 text-xs font-semibold hover:bg-navy-mid">+ Create New Event</button>
+          <button onclick="alert('Publish Article dialog opened')" class="rounded-full bg-copper text-white px-5 py-2 text-xs font-semibold hover:bg-copper-light">+ Publish News</button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl p-6 border border-sand/40 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Total Active Members</div>
+          <div class="text-3xl font-bold font-display text-navy mt-2">12,548</div>
+          <div class="text-[11px] text-sage font-semibold mt-1">+142 this month</div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-sand/40 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Pending Applications</div>
+          <div class="text-3xl font-bold font-display text-copper mt-2">38</div>
+          <div class="text-[11px] text-slate-500 mt-1">Requires review</div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-sand/40 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Upcoming Events</div>
+          <div class="text-3xl font-bold font-display text-navy mt-2">12</div>
+          <div class="text-[11px] text-slate-500 mt-1">Active registrations</div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-sand/40 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Quarterly Revenue</div>
+          <div class="text-3xl font-bold font-display text-navy mt-2">$148.5K</div>
+          <div class="text-[11px] text-sage font-semibold mt-1">+8.4% YoY</div>
+        </div>
+      </div>
+
+      <!-- Member Applications Table -->
+      <div class="bg-white rounded-2xl p-6 border border-sand/40 shadow-sm">
+        <h2 class="font-display text-xl font-bold text-navy mb-4">Recent Member Registrations</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-400 uppercase tracking-wider">
+                <th class="py-3 px-4">Member Name</th>
+                <th class="py-3 px-4">Category</th>
+                <th class="py-3 px-4">Institution</th>
+                <th class="py-3 px-4">Date Registered</th>
+                <th class="py-3 px-4">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr>
+                <td class="py-3.5 px-4 font-semibold text-navy">Dr. Sarah Jenkins</td>
+                <td class="py-3.5 px-4"><span class="bg-navy/10 text-navy px-2.5 py-0.5 rounded-full font-semibold">Professional</span></td>
+                <td class="py-3.5 px-4 text-slate-600">Stanford University</td>
+                <td class="py-3.5 px-4 text-slate-500">JUL 24, 2026</td>
+                <td class="py-3.5 px-4"><button onclick="alert('Member approved')" class="text-sage font-bold hover:underline">Approve</button></td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-semibold text-navy">David Chen</td>
+                <td class="py-3.5 px-4"><span class="bg-sage/10 text-sage px-2.5 py-0.5 rounded-full font-semibold">Student</span></td>
+                <td class="py-3.5 px-4 text-slate-600">Imperial College London</td>
+                <td class="py-3.5 px-4 text-slate-500">JUL 23, 2026</td>
+                <td class="py-3.5 px-4"><button onclick="alert('Member approved')" class="text-sage font-bold hover:underline">Approve</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-navy text-white/80 py-8 text-center text-xs border-t border-navy-light mt-auto">
+    © <span id="copyright-year">2026</span> Association of Geosciences &amp; Geo Engineering.
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -3,7 +3,6 @@ export const primaryNav = [
   { label: 'About', to: '/about' },
   { label: 'Membership', to: '/membership' },
   { label: 'Events', to: '/events' },
-  { label: 'Education', to: '/education' },
   { label: 'Communities', to: '/communities' },
   { label: 'News', to: '/news' },
   { label: 'Media', to: '/media' },

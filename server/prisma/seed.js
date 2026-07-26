@@ -25,6 +25,26 @@ async function main() {
 
   console.log('Cleaned old records.');
 
+  // 1b. Seed default admin user
+  const adminEmail = 'admin@agge.com';
+  const adminPasswordHash = '$2b$10$5AusTH4TrhO8Sn4RRg6ByOxL4IpJ.jKvavsFRPTmgiZXG2qwdX/M6'; // hash of 'rootroot'
+  
+  const adminUser = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      passwordHash: adminPasswordHash,
+      role: 'ADMIN',
+    },
+    create: {
+      email: adminEmail,
+      passwordHash: adminPasswordHash,
+      firstName: 'AGGE',
+      lastName: 'Admin',
+      role: 'ADMIN',
+    },
+  });
+  console.log('Seeded default admin user:', adminUser.email);
+
   // 2. Create Membership Plans
   const individualPlan = await prisma.membershipPlan.create({
     data: {

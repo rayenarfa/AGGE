@@ -30,11 +30,6 @@ import {
 import EventDetailPage from '../pages/events/EventDetailPage';
 import EnvironmentalPolicyPage from '../pages/events/EnvironmentalPolicyPage';
 
-import EducationPage, {
-  CoursesPage,
-  EducationCalendarPage,
-} from '../pages/education/EducationPages';
-
 import CommunitiesPage, {
   LocalChaptersPage,
   CommunityDetailPage,
@@ -103,11 +98,6 @@ const router = createBrowserRouter([
       { path: 'events/webinars', element: <WebinarsPage /> },
       { path: 'events/environmental-policy', element: <EnvironmentalPolicyPage /> },
       { path: 'events/:type/:slug', element: <EventDetailPage /> },
-
-      // Education
-      { path: 'education', element: <EducationPage /> },
-      { path: 'education/courses', element: <CoursesPage /> },
-      { path: 'education/calendar', element: <EducationCalendarPage /> },
 
       // Communities
       { path: 'communities', element: <CommunitiesPage /> },

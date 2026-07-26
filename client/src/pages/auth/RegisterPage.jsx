@@ -18,7 +18,6 @@ export default function RegisterPage() {
     e.preventDefault();
     setError(null);
 
-    // Frontend validation check
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -40,7 +39,6 @@ export default function RegisterPage() {
       });
       navigate('/');
     } catch (err) {
-      // Catch backend Zod or database unique errors
       if (err.response?.data?.details) {
         const details = err.response.data.details;
         const errMsgs = [];
@@ -59,34 +57,33 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-140px)] items-center justify-center px-6 py-12">
-      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/40 p-8 shadow-2xl backdrop-blur-md">
+    <div className="flex min-h-[calc(100vh-140px)] items-center justify-center px-6 py-12 bg-cream">
+      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-sandstone/30 bg-white p-8 shadow-xl">
         
-        {/* Decorative ambient background blur lights */}
-        <div className="absolute -top-10 -left-10 -z-10 h-32 w-32 rounded-full bg-emerald-500/10 blur-2xl" />
-        <div className="absolute -bottom-10 -right-10 -z-10 h-32 w-32 rounded-full bg-blue-500/10 blur-2xl" />
+        {/* Top brand border strip */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-copper to-copper-light" />
 
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold text-xl">
+        <div className="mb-8 text-center space-y-2">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-sand-light text-navy font-bold text-xl border border-sandstone/20">
             A
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">Create Account</h2>
-          <p className="mt-2 text-sm text-slate-400">
+          <h2 className="text-2xl font-display font-semibold text-navy leading-none">Create Account</h2>
+          <p className="text-xs text-text-muted">
             Join AGGE to access professional communities, events, and education
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-lg border border-red-500/30 bg-red-950/20 p-3 text-sm text-red-400 animate-fadeIn">
-            <p className="font-semibold">Registration Error</p>
+          <div className="mb-6 rounded-lg border border-red-500/20 bg-red-50 p-3 text-xs text-red-600 animate-fadeIn font-semibold">
+            <p className="font-bold">Registration Error</p>
             <p className="mt-0.5 opacity-90">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 font-sans">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="firstName" className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <div className="space-y-1">
+              <label htmlFor="firstName" className="block text-[10px] uppercase font-bold tracking-widest text-text-muted">
                 First Name
               </label>
               <input
@@ -95,12 +92,12 @@ export default function RegisterPage() {
                 required
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2.5 text-sm text-white placeholder-slate-600 transition focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                className="w-full rounded-lg border border-sandstone/35 bg-cream/20 px-3.5 py-2 text-xs text-navy focus:border-copper focus:outline-none"
                 placeholder="Jane"
               />
             </div>
-            <div>
-              <label htmlFor="lastName" className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <div className="space-y-1">
+              <label htmlFor="lastName" className="block text-[10px] uppercase font-bold tracking-widest text-text-muted">
                 Last Name
               </label>
               <input
@@ -109,14 +106,14 @@ export default function RegisterPage() {
                 required
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2.5 text-sm text-white placeholder-slate-600 transition focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                className="w-full rounded-lg border border-sandstone/35 bg-cream/20 px-3.5 py-2 text-xs text-navy focus:border-copper focus:outline-none"
                 placeholder="Doe"
               />
             </div>
           </div>
 
-          <div>
-            <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <div className="space-y-1">
+            <label htmlFor="email" className="block text-[10px] uppercase font-bold tracking-widest text-text-muted">
               Email Address
             </label>
             <input
@@ -125,13 +122,13 @@ export default function RegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2.5 text-sm text-white placeholder-slate-600 transition focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-sandstone/35 bg-cream/20 px-3.5 py-2 text-xs text-navy focus:border-copper focus:outline-none"
               placeholder="jane.doe@example.com"
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <div className="space-y-1">
+            <label htmlFor="password" className="block text-[10px] uppercase font-bold tracking-widest text-text-muted">
               Password
             </label>
             <input
@@ -140,13 +137,13 @@ export default function RegisterPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2.5 text-sm text-white placeholder-slate-600 transition focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-sandstone/35 bg-cream/20 px-3.5 py-2 text-xs text-navy focus:border-copper focus:outline-none"
               placeholder="••••••••"
             />
           </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <div className="space-y-1">
+            <label htmlFor="confirmPassword" className="block text-[10px] uppercase font-bold tracking-widest text-text-muted">
               Confirm Password
             </label>
             <input
@@ -155,7 +152,7 @@ export default function RegisterPage() {
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2.5 text-sm text-white placeholder-slate-600 transition focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-sandstone/35 bg-cream/20 px-3.5 py-2 text-xs text-navy focus:border-copper focus:outline-none"
               placeholder="••••••••"
             />
           </div>
@@ -163,15 +160,15 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 mt-2 cursor-pointer"
+            className="w-full rounded-full bg-gradient-to-r from-copper to-copper-light py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:scale-[1.01] transition shadow shadow-copper/25 border-none cursor-pointer mt-2 disabled:opacity-50"
           >
             {isSubmitting ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
 
-        <p className="mt-8 text-center text-xs text-slate-500">
+        <p className="mt-8 text-center text-xs text-text-muted">
           Already have an account?{' '}
-          <Link to="/login" className="font-semibold text-emerald-400 hover:underline">
+          <Link to="/login" className="font-bold text-copper hover:underline uppercase tracking-wider">
             Sign in
           </Link>
         </p>

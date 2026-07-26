@@ -1,27 +1,31 @@
 export default function CourseCard({ course }) {
   return (
-    <article className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-      <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs text-slate-300">{course.type}</span>
-      <h3 className="mt-3 text-lg font-semibold text-white">{course.title}</h3>
-      <dl className="mt-3 space-y-1 text-sm text-slate-400">
-        <div className="flex gap-2">
-          <dt className="text-slate-500">Instructor:</dt>
-          <dd>{course.instructor}</dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="text-slate-500">Category:</dt>
-          <dd>{course.category}</dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="text-slate-500">Dates:</dt>
-          <dd>{course.dates}</dd>
-        </div>
-      </dl>
+    <article className="rounded-xl border border-sandstone/30 bg-white p-6 shadow-md shadow-navy/5 transition-all duration-300 hover:shadow-lg hover:border-copper/45 hover:-translate-y-1 flex flex-col justify-between">
+      <div>
+        <span className="rounded-full bg-sand-light px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-navy">
+          {course.type}
+        </span>
+        <h3 className="mt-3 text-lg font-display font-semibold text-navy leading-snug">{course.title}</h3>
+        <dl className="mt-4 space-y-2 text-xs text-text-muted font-sans border-t border-sandstone/10 pt-4">
+          <div className="flex gap-2">
+            <dt className="font-semibold text-navy">Instructor:</dt>
+            <dd>{course.instructor}</dd>
+          </div>
+          <div className="flex gap-2">
+            <dt className="font-semibold text-navy">Category:</dt>
+            <dd>{course.category}</dd>
+          </div>
+          <div className="flex gap-2">
+            <dt className="font-semibold text-navy">Dates:</dt>
+            <dd>{course.dates}</dd>
+          </div>
+        </dl>
+      </div>
       <button
         type="button"
-        className="mt-4 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-500"
+        className="mt-6 w-full rounded-full bg-gradient-to-r from-copper to-copper-light text-center py-2.5 text-xs font-semibold text-white transition hover:scale-105 shadow shadow-copper/20 cursor-pointer border-none"
       >
-        Register
+        Register Course
       </button>
     </article>
   );

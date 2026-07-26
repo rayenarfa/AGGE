@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { PageLoader, TableSkeleton } from '../../components/ui/Loader';
 import { getStats, getUsers, updateUserRole, getAuditLogs, getAdminEvents } from '../../services/admin';
@@ -642,10 +642,10 @@ export default function AdminDashboardPage() {
   if (!user || !ADMIN_ROLES.includes(user.role)) return null;
 
   return (
-    <div className="flex min-h-[calc(100vh-140px)] flex-col lg:flex-row">
+    <div className="flex min-h-[calc(100vh-140px)] flex-col lg:flex-row bg-navy text-slate-100">
       
       {/* Sidebar Navigation */}
-      <aside className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-slate-800 bg-slate-900/10 shrink-0">
+      <aside className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-slate-800 bg-navy-mid shrink-0">
         <div className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500">AGGE Control Panel</h2>
           <p className="mt-1 text-sm font-bold text-white capitalize">{user.role.replace('_', ' ').toLowerCase()}</p>
@@ -942,6 +942,14 @@ export default function AdminDashboardPage() {
                             <p className="text-slate-500">Non-Mem: {Number(evt.priceNonMember) === 0 ? 'Free' : `${Number(evt.priceNonMember)} EUR`}</p>
                           </td>
                           <td className="p-4 text-right space-x-2 whitespace-nowrap">
+                            <Link
+                              to={`/events/${evt.eventType.toLowerCase() === 'conference' ? 'conferences' : evt.eventType.toLowerCase() === 'workshop' ? 'workshops' : 'webinars'}/${evt.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-sky-400 hover:text-sky-300 font-semibold bg-sky-500/10 hover:bg-sky-500/20 px-2.5 py-1.5 rounded cursor-pointer inline-block"
+                            >
+                              View
+                            </Link>
                             <button
                               type="button"
                               onClick={() => openEventForm(evt)}
@@ -989,7 +997,13 @@ export default function AdminDashboardPage() {
                             type="text"
                             required
                             value={eventTitle}
-                            onChange={(e) => setEventTitle(e.target.value)}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setEventTitle(val);
+                              if (!editingEvent) {
+                                setEventSlug(val.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-'));
+                              }
+                            }}
                             placeholder="e.g. Near Surface Conference 2026"
                             className="mt-1 w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
                           />

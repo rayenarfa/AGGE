@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found — AGGE</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0c1a2b',
+            'navy-mid': '#152a42',
+            'navy-light': '#1e3a56',
+            sand: '#d9cbb0',
+            sandstone: '#c4a57b',
+            'sand-light': '#ede4d3',
+            sage: '#7a9b76',
+            'sage-light': '#a3bf9f',
+            copper: '#b87333',
+            'copper-light': '#d4956a',
+            cream: '#f7f3ec',
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            display: ['"DM Serif Display"', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="flex flex-col min-h-screen bg-navy text-white relative">
+  <div class="contour-bg opacity-20"></div>
+
+  <!-- Header -->
+  <header class="p-6">
+    <div class="mx-auto max-w-6xl flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2">
+        <img src="https://agge.in/assets/images/resources/ColorAGGE_LOGO__2@4x.png" alt="AGGE Logo" class="h-10" />
+      </a>
+      <a href="index.html" class="text-xs text-sand hover:underline font-semibold">← Return Home</a>
+    </div>
+  </header>
+
+  <!-- 404 Center -->
+  <main class="flex-1 flex items-center justify-center px-6 py-12 relative z-10 page-transition-wrapper text-center">
+    <div class="max-w-md">
+      <div class="font-display text-8xl font-bold text-copper mb-4">404</div>
+      <h1 class="font-display text-3xl font-bold text-cream mb-2">Uncharted Geological Territory</h1>
+      <p class="text-xs text-slate-300 mb-8 leading-relaxed">
+        The page or resource you are looking for has been moved, renamed, or does not exist in our subsurface archives.
+      </p>
+      <a href="index.html" class="inline-block rounded-full bg-gradient-to-r from-copper to-copper-light px-8 py-3 text-xs font-bold text-white shadow-lg hover:scale-105 transition">
+        Return to AGGE Homepage
+      </a>
+    </div>
+  </main>
+
+  <footer class="py-6 text-center text-xs text-slate-500 relative z-10">
+    © <span id="copyright-year">2026</span> Association of Geosciences &amp; Geo Engineering.
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

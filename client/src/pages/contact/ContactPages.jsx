@@ -48,66 +48,66 @@ function ContactForm({ type = 'GENERAL' }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-4 rounded-xl border border-slate-800 bg-slate-900/40 p-6 text-left">
+    <form onSubmit={handleSubmit} className="mt-6 space-y-4 rounded-xl border border-sandstone/30 bg-white p-6 shadow-md shadow-navy/5 text-left">
       {success && (
-        <div className="rounded-lg border border-emerald-500/20 bg-emerald-950/20 p-4 text-sm text-emerald-400">
+        <div className="rounded-lg border border-emerald-500/30 bg-emerald-50 p-4 text-sm text-emerald-800 font-medium">
           Your message has been sent successfully. We will get back to you shortly!
         </div>
       )}
       {errorMsg && (
-        <div className="rounded-lg border border-red-500/20 bg-red-950/20 p-4 text-sm text-red-400">
+        <div className="rounded-lg border border-red-500/30 bg-red-50 p-4 text-sm text-red-800 font-medium">
           {errorMsg}
         </div>
       )}
 
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">Name</label>
+        <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-text-muted">Name</label>
         <input
           type="text"
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Jane Doe"
-          className="w-full rounded-lg border border-slate-750 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-sm text-navy transition focus:bg-white focus:border-copper focus:outline-none"
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">Email Address</label>
+        <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-text-muted">Email Address</label>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="jane@example.com"
-          className="w-full rounded-lg border border-slate-750 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-sm text-navy transition focus:bg-white focus:border-copper focus:outline-none"
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">Subject</label>
+        <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-text-muted">Subject</label>
         <input
           type="text"
           required
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
           placeholder="e.g. Media request / Account support"
-          className="w-full rounded-lg border border-slate-750 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-sm text-navy transition focus:bg-white focus:border-copper focus:outline-none"
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">Message</label>
+        <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-text-muted">Message</label>
         <textarea
           required
           rows={4}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message details here..."
-          className="w-full rounded-lg border border-slate-750 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-sm text-navy transition focus:bg-white focus:border-copper focus:outline-none"
         />
       </div>
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition disabled:opacity-50 cursor-pointer animate-pulse"
+        className="rounded-full bg-gradient-to-r from-copper to-copper-light px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:scale-[1.02] transition shadow border-none cursor-pointer text-center"
       >
         {submitting ? 'Sending...' : 'Send Message'}
       </button>

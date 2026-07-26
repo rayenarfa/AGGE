@@ -125,27 +125,27 @@ export default function EventsCalendarPage() {
         <div className="mt-8 grid gap-8 lg:grid-cols-4">
           
           {/* SIDEBAR FILTER PANEL */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-6 space-y-6 text-left self-start lg:col-span-1">
+          <div className="rounded-xl border border-sandstone/30 bg-white p-6 space-y-6 text-left self-start lg:col-span-1 shadow-md shadow-navy/5">
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 pb-2 border-b border-slate-800/60">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-navy pb-2 border-b border-sandstone/25">
                 Refine Search
               </h3>
             </div>
 
             {/* Keyword Search */}
             <form onSubmit={handleSearchSubmit} className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Keyword Search</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-text-muted">Keyword Search</label>
               <div className="relative">
                 <input
                   type="text"
                   placeholder="e.g. reservoir, CO2"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950/80 px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-xs text-navy focus:bg-white focus:border-copper focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="absolute right-2.5 top-2.5 text-slate-500 hover:text-white text-xs cursor-pointer"
+                  className="absolute right-2.5 top-2.5 text-text-muted hover:text-navy text-xs cursor-pointer border-none bg-transparent"
                 >
                   🔍
                 </button>
@@ -154,7 +154,7 @@ export default function EventsCalendarPage() {
 
             {/* Item Type Selector */}
             <div className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Catalog Category</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-text-muted">Catalog Category</label>
               <div className="flex gap-2">
                 {['ALL', 'EVENT', 'COURSE'].map((t) => (
                   <button
@@ -165,10 +165,10 @@ export default function EventsCalendarPage() {
                       setEventType('');
                       setCourseType('');
                     }}
-                    className={`flex-1 rounded py-1.5 text-[10px] font-bold tracking-wider uppercase transition cursor-pointer text-center ${
+                    className={`flex-1 rounded-full py-1.5 text-[9px] font-bold tracking-wider uppercase transition cursor-pointer text-center border-none ${
                       type === t
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-slate-900 text-slate-400 hover:bg-slate-850 hover:text-white'
+                        ? 'bg-copper text-white shadow-sm'
+                        : 'bg-sand-light/40 text-text-muted hover:bg-sand-light/80 hover:text-navy'
                     }`}
                   >
                     {t === 'ALL' ? 'All' : t === 'EVENT' ? 'Events' : 'Courses'}
@@ -180,11 +180,11 @@ export default function EventsCalendarPage() {
             {/* Event Type select */}
             {type !== 'COURSE' && (
               <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Event Type</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-text-muted">Event Type</label>
                 <select
                   value={eventType}
                   onChange={(e) => setEventType(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300 focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-xs text-navy focus:bg-white focus:border-copper focus:outline-none"
                 >
                   <option value="">All Event Formats</option>
                   {EVENT_TYPES.map((et) => (
@@ -197,11 +197,11 @@ export default function EventsCalendarPage() {
             {/* Course Type select */}
             {type !== 'EVENT' && (
               <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Course Type</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-text-muted">Course Type</label>
                 <select
                   value={courseType}
                   onChange={(e) => setCourseType(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300 focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-xs text-navy focus:bg-white focus:border-copper focus:outline-none"
                 >
                   <option value="">All Course Formats</option>
                   {COURSE_TYPES.map((ct) => (
@@ -213,11 +213,11 @@ export default function EventsCalendarPage() {
 
             {/* Technical Category */}
             <div className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Technical Topic</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-text-muted">Technical Topic</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300 focus:border-emerald-500 focus:outline-none"
+                className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-xs text-navy focus:bg-white focus:border-copper focus:outline-none"
               >
                 <option value="">All Categories</option>
                 {CATEGORIES.map((cat) => (
@@ -228,19 +228,19 @@ export default function EventsCalendarPage() {
 
             {/* Date Range selectors */}
             <div className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Date Range</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-text-muted">Date Range</label>
               <div className="space-y-1.5">
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300 focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-xs text-navy focus:bg-white focus:border-copper focus:outline-none"
                 />
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300 focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-sandstone/45 bg-sand-light/10 px-3 py-2 text-xs text-navy focus:bg-white focus:border-copper focus:outline-none"
                 />
               </div>
             </div>
@@ -252,9 +252,9 @@ export default function EventsCalendarPage() {
                 type="checkbox"
                 checked={onlineOnly}
                 onChange={(e) => setOnlineOnly(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-800 bg-slate-950 text-emerald-600 focus:ring-emerald-500"
+                className="h-4 w-4 rounded border-sandstone/45 bg-sand-light/10 text-copper focus:ring-copper"
               />
-              <label htmlFor="onlineCheck" className="text-xs font-medium text-slate-400 cursor-pointer">
+              <label htmlFor="onlineCheck" className="text-xs font-semibold text-text-muted cursor-pointer font-sans">
                 Online-only options
               </label>
             </div>
@@ -263,7 +263,7 @@ export default function EventsCalendarPage() {
             <button
               type="button"
               onClick={handleReset}
-              className="mt-4 w-full rounded bg-slate-900 border border-slate-850 hover:bg-slate-850 py-2 text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer text-center"
+              className="mt-4 w-full rounded-full bg-sand-light/20 hover:bg-sand-light/50 border border-sandstone/30 py-2 text-xs font-bold uppercase tracking-wider text-navy transition cursor-pointer text-center"
             >
               Reset Filters
             </button>
@@ -272,35 +272,35 @@ export default function EventsCalendarPage() {
           {/* MAIN CALENDAR TIMELINE PANEL */}
           <div className="lg:col-span-3 text-left">
             {loading ? (
-              <div className="h-60 flex items-center justify-center text-slate-400 text-sm">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-850 border-t-emerald-500 mr-3" />
+              <div className="h-60 flex items-center justify-center text-text-muted text-sm">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-sandstone/30 border-t-copper mr-3" />
                 Loading calendar indices...
               </div>
             ) : error ? (
-              <div className="rounded-xl border border-red-500/20 bg-red-950/10 p-6 text-sm text-red-400">
+              <div className="rounded-xl border border-red-500/30 bg-red-50 p-6 text-sm text-red-800 font-medium">
                 {error}
               </div>
             ) : (
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">
+                  <p className="text-xs text-text-muted font-semibold uppercase tracking-wider">
                     Showing {items.length} items
                   </p>
                 </div>
 
-                <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/10 shadow-lg">
-                  <table className="w-full min-w-[700px] text-left text-sm text-slate-300">
+                <div className="overflow-x-auto rounded-xl border border-sandstone/30 bg-white shadow-md shadow-navy/5">
+                  <table className="w-full min-w-[700px] text-left text-sm text-navy">
                     <thead>
-                      <tr className="border-b border-slate-800 text-xs font-semibold uppercase tracking-wider text-slate-500 bg-slate-900/25">
+                      <tr className="border-b border-sandstone/30 text-[10px] font-bold uppercase tracking-wider text-copper bg-sand-light/35">
                         <th className="p-4">Schedule / Dates</th>
                         <th className="p-4">Format / Category</th>
                         <th className="p-4">Title / Venue</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/50">
+                    <tbody className="divide-y divide-sandstone/20">
                       {items.length === 0 ? (
                         <tr>
-                          <td colSpan={3} className="p-12 text-center text-slate-500 text-xs font-medium">
+                          <td colSpan={3} className="p-12 text-center text-text-muted text-xs font-semibold">
                             No events or education programs match your filter parameters.
                           </td>
                         </tr>
@@ -314,22 +314,22 @@ export default function EventsCalendarPage() {
                           }
 
                           return (
-                            <tr key={`${item.itemType}-${item.id}`} className="hover:bg-slate-900/20 transition">
+                            <tr key={`${item.itemType}-${item.id}`} className="hover:bg-sand-light/10 transition">
                               {/* Date cell */}
-                              <td className="p-4 text-xs font-medium text-slate-300 whitespace-nowrap">
+                              <td className="p-4 text-xs font-semibold text-navy whitespace-nowrap">
                                 {formatEventDates(item.startDate, item.endDate)}
                               </td>
                               
                               {/* Classification Badges */}
                               <td className="p-4 whitespace-nowrap">
-                                <span className={`inline-block rounded px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider mr-2 ${
+                                <span className={`inline-block rounded px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider mr-2 border ${
                                   item.itemType === 'EVENT'
-                                    ? 'bg-emerald-500/10 text-emerald-400'
-                                    : 'bg-sky-500/10 text-sky-400'
+                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                    : 'bg-blue-50 text-blue-700 border-blue-200'
                                 }`}>
                                   {item.itemType}
                                 </span>
-                                <span className="inline-block text-[10px] text-slate-500">
+                                <span className="inline-block text-[10px] text-text-muted font-sans font-medium">
                                   {item.category}
                                 </span>
                               </td>
@@ -338,16 +338,16 @@ export default function EventsCalendarPage() {
                               <td className="p-4">
                                 <Link
                                   to={detailPath}
-                                  className="font-semibold text-white hover:text-emerald-400 transition text-sm leading-snug"
+                                  className="font-bold text-navy hover:text-copper transition text-sm leading-snug"
                                 >
                                   {item.title}
                                 </Link>
-                                <div className="mt-1 flex items-center gap-2 text-[10px] text-slate-500 font-medium">
+                                <div className="mt-1 flex items-center gap-2 text-[10px] text-text-muted font-medium font-sans">
                                   <span>{item.location}</span>
                                   {item.online && (
                                     <>
                                       <span>•</span>
-                                      <span className="text-emerald-500/80 font-bold uppercase tracking-wider text-[8px]">Live Stream</span>
+                                      <span className="text-emerald-700 font-bold uppercase tracking-wider text-[8px]">Live Stream</span>
                                     </>
                                   )}
                                 </div>

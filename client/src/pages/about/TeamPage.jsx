@@ -24,10 +24,10 @@ export default function TeamPage() {
     >
       <div className="grid gap-4 sm:grid-cols-2">
         {teamMembers.map((member) => (
-          <div key={member.name} className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-            <p className="font-semibold text-white">{member.name}</p>
-            <p className="text-sm text-emerald-400">{member.role}</p>
-            <p className="mt-2 text-sm text-slate-400">{member.bio}</p>
+          <div key={member.name} className="rounded-xl border border-sandstone/30 bg-white p-4 shadow-sm hover:border-copper/45 hover:-translate-y-0.5 transition duration-200">
+            <p className="font-semibold text-navy">{member.name}</p>
+            <p className="text-sm text-copper font-semibold">{member.role}</p>
+            <p className="mt-2 text-xs text-text-muted leading-relaxed font-sans">{member.bio}</p>
           </div>
         ))}
       </div>

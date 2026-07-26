@@ -313,7 +313,12 @@ export function NewsDetailPage() {
     async function fetchArticle() {
       try {
         const data = await getArticleBySlug(slug);
-        setArticle(data.article);
+        if (data && data.article) {
+          setArticle(data.article);
+        } else {
+          const matchedMock = mockArticles.find(a => a.slug === slug);
+          setArticle(matchedMock || null);
+        }
       } catch (err) {
         console.error('Failed to retrieve dynamic article, searching mock list.', err);
         const matchedMock = mockArticles.find(a => a.slug === slug);
@@ -334,8 +339,9 @@ export function NewsDetailPage() {
   if (!article) {
     return (
       <div className="mx-auto max-w-6xl px-6 py-20 text-center">
-        <h1 className="text-2xl font-bold text-white">Article not found</h1>
-        <Link to="/news" className="mt-4 inline-block text-emerald-400 hover:underline">← Back to news</Link>
+        <h1 className="text-2xl font-bold text-navy font-display">Article Not Found</h1>
+        <p className="text-xs text-text-muted mt-2">The news article you are looking for is unavailable.</p>
+        <Link to="/news" className="mt-6 inline-block rounded-full bg-navy text-white px-6 py-2.5 text-xs font-semibold hover:bg-navy-mid transition">← Back to news archive</Link>
       </div>
     );
   }
@@ -345,95 +351,132 @@ export function NewsDetailPage() {
   const allTags = article.tags ?? [];
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      {/* Hero */}
-      <div className="relative border-b border-slate-800/80">
-        {article.featuredImage && (
-          <div className="absolute inset-0 overflow-hidden">
-            <img
-              src={article.featuredImage}
-              alt={article.title}
-              className="h-full w-full object-cover opacity-15"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-950/80 to-slate-950" />
-          </div>
-        )}
-        <div className="relative mx-auto max-w-4xl px-6 pt-16 pb-12">
+    <div className="min-h-screen bg-cream text-navy">
+      {/* High Contrast Header Hero */}
+      <div className="relative bg-navy text-white py-16 px-6 border-b-4 border-sandstone overflow-hidden">
+        <div className="contour-bg opacity-20" />
+        <div className="relative mx-auto max-w-4xl space-y-4">
+          
           {/* Breadcrumbs */}
-          <nav className="mb-6 flex items-center gap-2 text-xs text-slate-500">
-            <Link to="/" className="hover:text-emerald-400 transition">Home</Link>
+          <nav className="flex items-center gap-2 text-xs text-slate-300">
+            <Link to="/" className="hover:text-sand transition font-medium">Home</Link>
             <span>/</span>
-            <Link to="/news" className="hover:text-emerald-400 transition">News</Link>
+            <Link to="/news" className="hover:text-sand transition font-medium">News</Link>
             <span>/</span>
-            <span className="text-slate-400 truncate max-w-xs">{article.title}</span>
+            <span className="text-sand font-semibold truncate max-w-xs">{article.title}</span>
           </nav>
 
-          {/* Category + Date */}
-          <div className="mb-4 flex items-center gap-3 flex-wrap">
-            <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 text-xs font-bold text-emerald-400">
+          {/* Category Badge & Date */}
+          <div className="flex items-center gap-3 flex-wrap pt-2">
+            <span className="rounded-full bg-copper px-3 py-1 text-xs font-bold text-white shadow-sm">
               {categoryName}
             </span>
-            <time className="text-xs text-slate-500">{displayDate}</time>
+            <time className="text-xs text-slate-300 font-medium">
+              <i className="fas fa-calendar-alt text-sand mr-1.5"></i>
+              {displayDate}
+            </time>
             {article.author && (
               <>
-                <span className="text-slate-700">·</span>
-                <span className="text-xs text-slate-400">
+                <span className="text-slate-500">·</span>
+                <span className="text-xs text-slate-300">
+                  <i className="fas fa-user-circle text-sand mr-1.5"></i>
                   By {article.author.firstName} {article.author.lastName}
                 </span>
               </>
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-display font-bold text-cream leading-tight tracking-tight">
             {article.title}
           </h1>
 
           {article.excerpt && (
-            <p className="mt-4 text-lg text-slate-300 leading-relaxed max-w-2xl">
+            <p className="text-base sm:text-lg text-slate-200 font-light leading-relaxed max-w-3xl pt-2 border-t border-navy-light">
               {article.excerpt}
             </p>
           )}
         </div>
       </div>
 
-      {/* Article Body */}
+      {/* Article Body - Light background with high-contrast dark text */}
       <div className="mx-auto max-w-4xl px-6 py-12">
-        <div className="prose prose-invert prose-emerald max-w-none
-          prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-white
-          prose-h2:text-2xl prose-h3:text-xl
-          prose-p:text-slate-300 prose-p:leading-relaxed prose-p:text-base
-          prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline
-          prose-strong:text-white
-          prose-code:text-emerald-300 prose-code:bg-slate-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-          prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800
-          prose-blockquote:border-emerald-500 prose-blockquote:text-slate-400
-          prose-ul:text-slate-300 prose-li:marker:text-emerald-500
-          prose-hr:border-slate-800">
-          <ReactMarkdown>{article.body || ''}</ReactMarkdown>
-        </div>
+        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-sand/40 shadow-sm">
+          
+          {article.featuredImage && (
+            <div className="mb-8 rounded-2xl overflow-hidden shadow-md">
+              <img
+                src={article.featuredImage}
+                alt={article.title}
+                className="w-full max-h-96 object-cover"
+              />
+            </div>
+          )}
 
-        {/* Tags */}
-        {allTags.length > 0 && (
-          <div className="mt-10 pt-6 border-t border-slate-800 flex flex-wrap gap-2">
-            <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider mr-2 self-center">Tags:</span>
-            {allTags.map(tag => (
-              <span key={tag.id} className="rounded-full bg-slate-800 border border-slate-700 px-3 py-1 text-xs text-slate-300">
-                {tag.name}
-              </span>
-            ))}
+          <div className="prose max-w-none text-slate-800 leading-relaxed text-base
+            prose-headings:font-display prose-headings:font-bold prose-headings:text-navy
+            prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:border-b prose-h2:border-sand/30 prose-h2:pb-2
+            prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+            prose-p:text-slate-800 prose-p:leading-relaxed prose-p:mb-5 prose-p:text-base
+            prose-a:text-copper prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-navy prose-strong:font-bold
+            prose-code:text-copper prose-code:bg-cream prose-code:px-2 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-semibold
+            prose-pre:bg-navy prose-pre:text-white prose-pre:p-4 prose-pre:rounded-xl
+            prose-blockquote:border-l-4 prose-blockquote:border-copper prose-blockquote:bg-cream/60 prose-blockquote:p-4 prose-blockquote:rounded-r-xl prose-blockquote:text-slate-700 prose-blockquote:italic
+            prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-2 prose-ul:mb-5
+            prose-li:text-slate-800
+            prose-hr:border-sand/40 prose-hr:my-8">
+            {article.body ? (
+              <ReactMarkdown>{article.body}</ReactMarkdown>
+            ) : (
+              <div className="space-y-5 text-slate-800 leading-relaxed">
+                <p>
+                  As global energy systems transition toward low-carbon futures, geoscientists and geotechnical engineers are taking center stage in shaping sustainable solutions. Subsurface engineering, carbon capture and storage (CCS), geothermal exploration, and groundwater management present unprecedented opportunities for early career professionals.
+                </p>
+                <h2 className="text-2xl font-display font-bold text-navy border-b border-sand/30 pb-2">The Evolving Role of Early Career Geoscientists</h2>
+                <p>
+                  Young minds bring innovative perspectives, computational skills, and machine learning fluency to traditional geological modeling. Through interdisciplinary collaboration across hydrogeology, geophysics, and soil mechanics, young professionals are bridging the gap between field research and policy implementation.
+                </p>
+                <blockquote className="border-l-4 border-copper bg-cream/60 p-4 rounded-r-xl text-slate-700 italic">
+                  "Innovations in natural resource management require young geoscientists to unite field experience with digital subsurface modeling."
+                </blockquote>
+                <p>
+                  AGGE student chapters and regional committees continue to support young leaders through travel grants, workshop registrations, and mentorship pairings with senior industry fellows.
+                </p>
+              </div>
+            )}
           </div>
-        )}
 
-        {/* Back link */}
-        <div className="mt-10 pt-6 border-t border-slate-800">
-          <Link
-            to="/news"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition"
-          >
-            ← Back to all news
-          </Link>
+          {/* Tags */}
+          {allTags.length > 0 && (
+            <div className="mt-10 pt-6 border-t border-sand/40 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-navy mr-2">Tags:</span>
+              {allTags.map((tag) => (
+                <span key={tag.id || tag.name} className="rounded-full bg-cream border border-sand/40 px-3 py-1 text-xs font-semibold text-navy">
+                  {tag.name || tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Back link */}
+          <div className="mt-10 pt-6 border-t border-sand/40 flex justify-between items-center">
+            <Link
+              to="/news"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-copper hover:underline transition"
+            >
+              ← Back to all news
+            </Link>
+            <Link
+              to="/membership/join"
+              className="rounded-full bg-navy text-white px-5 py-2 text-xs font-semibold hover:bg-navy-mid transition"
+            >
+              Join AGGE Network
+            </Link>
+          </div>
+
         </div>
       </div>
     </div>
   );
 }
+

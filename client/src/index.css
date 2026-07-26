@@ -1,6 +1,26 @@
 @import "tailwindcss";
 
 @theme {
+  /* Theme colors override */
+  --color-navy: #0c1a2b;
+  --color-navy-mid: #152a42;
+  --color-navy-light: #1e3a56;
+  --color-sand: #d9cbb0;
+  --color-sandstone: #c4a57b;
+  --color-sand-light: #ede4d3;
+  --color-sage: #7a9b76;
+  --color-sage-light: #a3bf9f;
+  --color-copper: #b87333;
+  --color-copper-light: #d4956a;
+  --color-cream: #f7f3ec;
+  --color-text-main: #2c3e50;
+  --color-text-muted: #5a6d7e;
+
+  /* Font overrides */
+  --font-sans: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "DM Serif Display", Georgia, serif;
+
+  /* Re-add pre-existing animations */
   --animate-fade-in: fade-in 0.3s ease-out;
   --animate-fade-in-slide-up: fade-in-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-pulse-slow: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -8,12 +28,8 @@
   --animate-glow: glow 4s ease-in-out infinite alternate;
 
   @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes fade-in-slide-up {
@@ -28,12 +44,8 @@
   }
 
   @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
 
   @keyframes glow {
@@ -46,11 +58,19 @@
   }
 }
 
+/* Custom styles from geoscience/style.css */
+html {
+  font-size: 17px;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  color: var(--color-text-main);
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 /* Global Page Transition Wrapper */
@@ -74,4 +94,233 @@ a.rounded-lg:active {
 .skeleton-bg {
   background: linear-gradient(90deg, #1e293b 25%, #334155 37%, #1e293b 63%);
   background-size: 400% 100%;
+}
+
+/* Topographic contour overlay (reusable) */
+.contour-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.25;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23a3bf9f' stroke-width='0.6' opacity='0.5'%3E%3Cpath d='M0 60 Q100 40 200 65 T400 55'/%3E%3Cpath d='M0 110 Q120 95 240 115 T400 100'/%3E%3Cpath d='M0 160 Q80 145 180 168 T400 155'/%3E%3Cpath d='M0 210 Q140 195 280 218 T400 205'/%3E%3Cpath d='M0 260 Q60 248 160 265 T400 252'/%3E%3Cpath d='M0 310 Q110 298 220 315 T400 300'/%3E%3Cpath d='M0 360 Q90 348 200 362 T400 348'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 400px 400px;
+}
+
+/* Geological strata dividers */
+.strata-divider {
+  height: 24px;
+  background: linear-gradient(
+    175deg,
+    #0c1a2b 0%,
+    #0c1a2b 18%,
+    #152a42 18%,
+    #152a42 36%,
+    #c4a57b 36%,
+    #c4a57b 54%,
+    #7a9b76 54%,
+    #7a9b76 72%,
+    #b87333 72%,
+    #b87333 88%,
+    #ede4d3 88%,
+    #ede4d3 100%
+  );
+  position: relative;
+  width: 100%;
+}
+
+.strata-divider::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 8px,
+    rgba(255, 255, 255, 0.04) 8px,
+    rgba(255, 255, 255, 0.04) 9px
+  );
+}
+
+.strata-divider.reverse {
+  transform: scaleY(-1);
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* Rotating globe animation rules */
+.hero-globe-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 900px;
+}
+
+.hero-globe {
+  position: relative;
+  width: min(380px, 70vw);
+  aspect-ratio: 1;
+}
+
+.globe-glow {
+  position: absolute;
+  inset: -8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(122, 155, 118, 0.35) 0%, transparent 70%);
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.globe-sphere {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow:
+    inset -40px -20px 80px rgba(0, 0, 0, 0.55),
+    inset 20px 20px 60px rgba(255, 255, 255, 0.08),
+    0 0 60px rgba(122, 155, 118, 0.25),
+    0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+.globe-texture {
+  position: absolute;
+  inset: 0;
+  width: 200%;
+  height: 100%;
+  background: url("https://upload.wikimedia.org/wikipedia/commons/2/23/Blue_Marble_2002.png") center/cover repeat-x;
+  animation: globeSpin 45s linear infinite;
+}
+
+@keyframes globeSpin {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.globe-atmosphere {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.18), transparent 55%);
+  pointer-events: none;
+}
+
+.globe-orbit {
+  position: absolute;
+  inset: -12%;
+  border: 1px solid rgba(163, 191, 159, 0.25);
+  border-radius: 50%;
+  animation: orbitSpin 20s linear infinite;
+}
+
+.globe-orbit::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--color-copper-light);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--color-copper);
+}
+
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.satellite-badge {
+  position: absolute;
+  bottom: 8%;
+  right: -5%;
+  background: rgba(12, 26, 43, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(163, 191, 159, 0.3);
+  border-radius: 12px;
+  padding: 0.5rem 0.85rem;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.satellite-badge:hover {
+  background: rgba(30, 58, 86, 0.85);
+  transform: scale(1.03);
+}
+
+/* Map marker & pulse animation */
+.map-marker {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 2;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.map-marker::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #b87333; /* --copper */
+  border-radius: 50%;
+  border: 2px solid #ede4d3; /* --sand-light */
+  box-shadow: 0 0 12px rgba(184, 115, 51, 0.6);
+  transition: transform 0.25s;
+}
+
+.map-marker::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px solid rgba(184, 115, 51, 0.4);
+  border-radius: 50%;
+  animation: markerPulse 2s ease-out infinite;
+}
+
+@keyframes markerPulse {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.map-marker.active::before,
+.map-marker:hover::before {
+  transform: scale(1.35);
+  background: #d4956a; /* --copper-light */
+}
+
+/* Tab Active underlays or borders */
+.pricing-tab.active {
+  border-color: #b87333; /* --copper */
+  color: #b87333;
 }

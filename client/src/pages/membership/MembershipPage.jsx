@@ -55,21 +55,21 @@ export default function MembershipPage() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-3">
           {plans.map((plan) => (
-            <div key={plan.id} className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/40 p-5 shadow transition hover:border-slate-700">
+            <div key={plan.id} className="flex flex-col justify-between rounded-xl border border-sandstone/30 bg-white p-5 shadow-sm transition hover:border-copper/45 hover:-translate-y-0.5">
               <div>
-                <h3 className="font-semibold text-white text-base">{plan.name}</h3>
-                <p className="mt-2 text-lg font-bold text-emerald-400">
+                <h3 className="font-semibold text-navy text-base">{plan.name}</h3>
+                <p className="mt-2 text-lg font-bold text-copper">
                   {Number(plan.price) === 0 ? 'Free' : `€${Number(plan.price).toFixed(2)}`}
-                  <span className="text-xs text-slate-500 font-normal"> / year</span>
+                  <span className="text-xs text-text-muted font-normal"> / year</span>
                 </p>
-                <p className="mt-3 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3">
+                <p className="mt-3 text-xs text-text-muted leading-relaxed border-t border-sandstone/25 pt-3 font-sans">
                   {plan.description}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => handleJoinClick(plan.id)}
-                className="mt-6 w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/20 py-2.5 text-xs font-semibold text-white transition cursor-pointer text-center"
+                className="mt-6 w-full rounded-full bg-gradient-to-r from-copper to-copper-light py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:scale-[1.02] transition shadow border-none cursor-pointer text-center"
               >
                 {user ? 'Select Plan' : 'Login to Join'}
               </button>

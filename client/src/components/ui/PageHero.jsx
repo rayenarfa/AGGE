@@ -1,14 +1,15 @@
 export default function PageHero({ title, subtitle, badge }) {
   return (
-    <div className="border-b border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950 px-6 py-14">
-      <div className="mx-auto max-w-6xl">
+    <div className="relative border-b border-navy-light bg-gradient-to-b from-navy to-navy-mid px-6 py-20 overflow-hidden text-white">
+      <div className="contour-bg opacity-15" />
+      <div className="mx-auto max-w-6xl relative z-10">
         {badge && (
-          <span className="mb-4 inline-block rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-emerald-400">
+          <span className="mb-4 inline-block rounded-full bg-sandstone/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-sand">
             {badge}
           </span>
         )}
-        <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{title}</h1>
-        {subtitle && <p className="mt-3 max-w-3xl text-lg text-slate-400">{subtitle}</p>}
+        <h1 className="text-4xl font-display tracking-wide text-white sm:text-5xl">{title}</h1>
+        {subtitle && <p className="mt-4 max-w-3xl text-md text-sand-light/90 leading-relaxed font-sans">{subtitle}</p>}
       </div>
     </div>
   );

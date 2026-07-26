@@ -2,17 +2,17 @@ import { NavLink } from 'react-router-dom';
 
 export default function SubNav({ items }) {
   return (
-    <nav className="mb-8 flex flex-wrap gap-2 border-b border-slate-800 pb-4">
+    <nav className="mb-8 flex flex-wrap gap-2 border-b border-sandstone/20 pb-4 font-sans">
       {items.map((item) => (
         <NavLink
           key={item.to}
           to={item.to}
           end={item.to.split('/').length <= 2}
           className={({ isActive }) =>
-            `rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+            `rounded-full px-4 py-1.5 text-xs font-bold tracking-wide uppercase transition ${
               isActive
-                ? 'bg-emerald-500/15 text-emerald-300'
-                : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                ? 'bg-copper text-white shadow shadow-copper/20'
+                : 'text-navy/80 hover:bg-sand-light/60 hover:text-navy'
             }`
           }
         >
