@@ -74,14 +74,24 @@ CREATE OR REPLACE TRIGGER set_profiles_updated_at
 -- Trigger to automatically create a profile record when a user signs up via Supabase Auth
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+  v_role public."Role" := 'MEMBER'::public."Role";
 BEGIN
+  IF NEW.raw_user_meta_data->>'role' IS NOT NULL AND NEW.raw_user_meta_data->>'role' <> '' THEN
+    BEGIN
+      v_role := (NEW.raw_user_meta_data->>'role')::public."Role";
+    EXCEPTION WHEN OTHERS THEN
+      v_role := 'MEMBER'::public."Role";
+    END;
+  END IF;
+
   INSERT INTO public.profiles ("id", "email", "firstName", "lastName", "role")
   VALUES (
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'firstName', NEW.raw_user_meta_data->>'first_name', ''),
     COALESCE(NEW.raw_user_meta_data->>'lastName', NEW.raw_user_meta_data->>'last_name', ''),
-    COALESCE((NEW.raw_user_meta_data->>'role')::"Role", 'MEMBER'::"Role")
+    v_role
   )
   ON CONFLICT ("id") DO UPDATE
   SET
@@ -89,8 +99,11 @@ BEGIN
     "firstName" = CASE WHEN EXCLUDED."firstName" <> '' THEN EXCLUDED."firstName" ELSE public.profiles."firstName" END,
     "lastName" = CASE WHEN EXCLUDED."lastName" <> '' THEN EXCLUDED."lastName" ELSE public.profiles."lastName" END;
   RETURN NEW;
+EXCEPTION WHEN OTHERS THEN
+  RAISE WARNING 'handle_new_user error: %', SQLERRM;
+  RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created

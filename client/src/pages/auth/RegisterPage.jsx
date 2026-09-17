@@ -49,7 +49,7 @@ export default function RegisterPage() {
         }
         setError(errMsgs.join(' | ') || 'Validation error');
       } else {
-        setError(err.response?.data?.error || 'Registration failed. Email might already be in use.');
+        setError(err.response?.data?.error || err.message || 'Registration failed.');
       }
     } finally {
       setIsSubmitting(false);

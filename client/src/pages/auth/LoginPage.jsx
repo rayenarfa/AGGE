@@ -23,7 +23,7 @@ export default function LoginPage() {
         navigate('/');
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to authenticate. Please check your credentials.');
+      setError(err.response?.data?.error || err.message || 'Failed to authenticate. Please check your credentials.');
     } finally {
       setIsSubmitting(false);
     }
