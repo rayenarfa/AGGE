@@ -60,7 +60,7 @@ export async function getPaymentSession(id) {
     .single();
 
   if (error) throw new Error(error.message);
-  return { session: data };
+  return { session: data, payment: data };
 }
 
 /**

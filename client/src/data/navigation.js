@@ -1,19 +1,19 @@
 export const primaryNav = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
-  { label: 'Membership', to: '/membership' },
   { label: 'Events', to: '/events' },
-  { label: 'Communities', to: '/communities' },
   { label: 'News', to: '/news' },
-  { label: 'Media', to: '/media' },
+  { label: 'Membership', to: '/membership' },
+  { label: 'Sponsors', to: '/sponsors' },
+  { label: 'Communities', to: '/communities' },
   { label: 'Contact', to: '/contact' },
 ];
 
 export const footerNav = {
   explore: [
+    { label: 'Our Sponsors', to: '/sponsors' },
+    { label: 'Become a Sponsor', to: '/sponsors#become-a-sponsor' },
     { label: 'Students & Early Career', to: '/students' },
-    { label: 'Services', to: '/services' },
-    { label: 'Local Chapters', to: '/communities/local-chapters' },
     { label: 'Event Calendar', to: '/events/calendar' },
   ],
   membership: [

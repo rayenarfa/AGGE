@@ -14,7 +14,7 @@ export default function HomePage() {
   const heroSlides = [
     {
       badge: 'Global Geoscience Network',
-      title: 'Advancing Geoscience & Geo Engineering',
+      title: 'Advancing Geophysics, Geoscience & Environment',
       description: 'Bridging academic research and field applications through training, consultancy, and a global network of earth science professionals.',
       image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80',
       primaryBtn: { text: 'Join the Association', to: '/membership/join' },
@@ -79,14 +79,13 @@ export default function HomePage() {
       {/* SECTION 1: HERO IMAGE CAROUSEL & IMPACT STATS                 */}
       {/* ───────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex flex-col justify-between overflow-hidden bg-navy text-white">
-        
+
         {/* Carousel Background Images with Fade Transition */}
         {heroSlides.map((slide, idx) => (
           <div
             key={slide.title}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              idx === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              }`}
           >
             <img
               src={slide.image}
@@ -99,14 +98,14 @@ export default function HomePage() {
         ))}
 
         {/* Hero Content Overlay */}
-        <div className="relative z-20 mx-auto w-full max-w-6xl px-6 pt-24 pb-16 my-auto flex flex-col justify-center">
+        <div className="relative z-20 mx-auto w-full max-w-6xl px-6 pt-12 sm:pt-24 pb-8 sm:pb-16 my-auto flex flex-col justify-center">
           <div className="max-w-2xl space-y-6 animate-fadeIn">
             <span className="inline-flex items-center gap-2 rounded-full border border-sand/30 bg-navy-mid/80 px-4 py-1.5 text-xs text-sand font-semibold backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-copper animate-ping"></span>
               {heroSlides[currentSlide].badge}
             </span>
 
-            <h1 className="text-4xl sm:text-6xl font-display font-light leading-tight text-cream">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-display font-light leading-snug text-cream">
               {heroSlides[currentSlide].title}
             </h1>
 
@@ -114,18 +113,24 @@ export default function HomePage() {
               {heroSlides[currentSlide].description}
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-2">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
-                to={heroSlides[currentSlide].primaryBtn.to}
-                className="rounded-full bg-gradient-to-r from-copper to-copper-light px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-xl hover:scale-105 transition"
+                to="/events"
+                className="rounded-full bg-gradient-to-r from-copper to-copper-light px-5 py-2.5 sm:px-7 sm:py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white shadow-xl hover:scale-105 transition flex items-center gap-2"
               >
-                {heroSlides[currentSlide].primaryBtn.text}
+                <i className="fas fa-calendar-alt text-sand"></i> See Events
               </Link>
               <Link
-                to={heroSlides[currentSlide].secondaryBtn.to}
-                className="rounded-full border border-white/40 bg-white/10 px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/20 transition backdrop-blur"
+                to="/membership"
+                className="rounded-full bg-white text-navy px-5 py-2.5 sm:px-7 sm:py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider hover:bg-cream hover:scale-105 transition shadow-md flex items-center gap-2"
               >
-                {heroSlides[currentSlide].secondaryBtn.text}
+                <i className="fas fa-user-plus text-copper"></i> Join Now
+              </Link>
+              <Link
+                to="/contact"
+                className="rounded-full border border-white/40 bg-white/10 px-4 py-2.5 sm:px-6 sm:py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white hover:bg-white/20 transition backdrop-blur flex items-center gap-2"
+              >
+                <i className="fas fa-envelope text-slate-300"></i> Contact Us
               </Link>
             </div>
           </div>
@@ -139,9 +144,8 @@ export default function HomePage() {
               <button
                 key={idx}
                 onClick={() => setCurrentSlide(idx)}
-                className={`h-2.5 rounded-full transition-all duration-300 ${
-                  idx === currentSlide ? 'w-10 bg-copper' : 'w-2.5 bg-white/40 hover:bg-white/70'
-                }`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-10 bg-copper' : 'w-2.5 bg-white/40 hover:bg-white/70'
+                  }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
@@ -154,14 +158,14 @@ export default function HomePage() {
               className="h-10 w-10 rounded-full border border-white/30 bg-navy-mid/60 text-white flex items-center justify-center hover:bg-copper hover:border-copper transition"
               aria-label="Previous Slide"
             >
-              <i class="fas fa-chevron-left text-xs"></i>
+              <i className="fas fa-chevron-left text-xs"></i>
             </button>
             <button
               onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
               className="h-10 w-10 rounded-full border border-white/30 bg-navy-mid/60 text-white flex items-center justify-center hover:bg-copper hover:border-copper transition"
               aria-label="Next Slide"
             >
-              <i class="fas fa-chevron-right text-xs"></i>
+              <i className="fas fa-chevron-right text-xs"></i>
             </button>
           </div>
         </div>
@@ -174,12 +178,12 @@ export default function HomePage() {
               <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Global Members</p>
             </div>
             <div>
-              <p class="text-2xl font-display font-bold text-sand">45+</p>
+              <p className="text-2xl font-display font-bold text-sand">45+</p>
               <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Regional Chapters</p>
             </div>
             <div>
               <p className="text-2xl font-display font-bold text-sand">180+</p>
-              <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Conferences &amp; Events</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Conferences &amp; Workshops</p>
             </div>
             <div>
               <p className="text-2xl font-display font-bold text-sand">4,000+</p>
@@ -191,11 +195,71 @@ export default function HomePage() {
       </section>
 
       {/* ───────────────────────────────────────────────────────────── */}
+      {/* MISSION & CORE VALUES SECTION (CLIENT HIGHLIGHT)              */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <section className="py-10 sm:py-16 px-4 sm:px-6 bg-white border-b border-sand/30">
+        <div className="mx-auto max-w-6xl space-y-12">
+
+          {/* Mission Card */}
+          <div className="bg-gradient-to-r from-navy to-navy-mid text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-navy-light relative overflow-hidden">
+            <div className="contour-bg opacity-15" />
+            <div className="relative z-10 max-w-3xl space-y-4">
+              <span className="inline-block rounded-full bg-copper/20 border border-copper/40 px-3.5 py-1 text-[10px] font-bold text-sand uppercase tracking-widest">
+                Our Official Mission
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-display font-light text-cream leading-snug">
+                Fostering Research, Cooperation &amp; Earth Science Applications for Sustainable Development
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
+                The Association for Geophysics, Geosciences and Environment (AGGE) is a scientific association dedicated to promoting cooperation among researchers, academics, professionals, and institutions at both national and international levels. It aims to enhance the value and visibility of scientific research in the fields of geophysics, geosciences, and environmental sciences, while fostering the exchange of knowledge and expertise and encouraging the use of modern technologies and digital tools.
+              </p>
+            </div>
+          </div>
+
+          {/* 4 Core Pillars Grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="p-6 bg-cream rounded-2xl border border-sand/40 space-y-2">
+              <div className="h-10 w-10 rounded-xl bg-copper/10 text-copper flex items-center justify-center font-bold text-base">
+                <i className="fas fa-award"></i>
+              </div>
+              <h3 className="font-bold text-navy text-sm">Technical Excellence</h3>
+              <p className="text-xs text-text-muted leading-relaxed">High-standard scientific research and rigorous methodology in geophysics and Earth science.</p>
+            </div>
+
+            <div className="p-6 bg-cream rounded-2xl border border-sand/40 space-y-2">
+              <div className="h-10 w-10 rounded-xl bg-sage/20 text-sage flex items-center justify-center font-bold text-base">
+                <i className="fas fa-leaf"></i>
+              </div>
+              <h3 className="font-bold text-navy text-sm">Protecting Environment</h3>
+              <p className="text-xs text-text-muted leading-relaxed">Promoting eco-friendly solutions, water security, and sustainable natural resource management.</p>
+            </div>
+
+            <div className="p-6 bg-cream rounded-2xl border border-sand/40 space-y-2">
+              <div className="h-10 w-10 rounded-xl bg-navy/10 text-navy flex items-center justify-center font-bold text-base">
+                <i className="fas fa-lightbulb"></i>
+              </div>
+              <h3 className="font-bold text-navy text-sm">Scientific Innovation</h3>
+              <p className="text-xs text-text-muted leading-relaxed">Fostering digital tools, modern technologies, and multidisciplinary Earth science applications.</p>
+            </div>
+
+            <div className="p-6 bg-cream rounded-2xl border border-sand/40 space-y-2">
+              <div className="h-10 w-10 rounded-xl bg-sandstone/20 text-sandstone flex items-center justify-center font-bold text-base">
+                <i className="fas fa-handshake"></i>
+              </div>
+              <h3 className="font-bold text-navy text-sm">Socioeconomic Synergy</h3>
+              <p className="text-xs text-text-muted leading-relaxed">Strengthening collaboration between academic researchers, industry, and decision-makers.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ───────────────────────────────────────────────────────────── */}
       {/* SECTION 2: GLOBAL PROJECTS MAP & DISCIPLINES SPOTLIGHT         */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-cream">
+      <section className="py-10 sm:py-20 px-4 sm:px-6 bg-cream">
         <div className="mx-auto max-w-6xl space-y-16">
-          
+
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-[10px] uppercase tracking-widest font-bold text-copper">Global Impact &amp; Research</span>
@@ -210,7 +274,7 @@ export default function HomePage() {
             {/* Map Canvas Card */}
             <div className="lg:col-span-2 relative bg-gradient-to-b from-navy-light to-navy p-4 rounded-3xl shadow-xl border border-navy-light overflow-hidden">
               <div className="contour-bg opacity-15" />
-              
+
               <div className="relative z-10 w-full aspect-[2/1] bg-[linear-gradient(rgba(12,26,43,0.4),rgba(12,26,43,0.4)),url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')] bg-center bg-contain bg-no-repeat rounded-2xl">
                 {/* Marker buttons */}
                 <button
@@ -270,7 +334,7 @@ export default function HomePage() {
             {[
               { title: 'Geophysics & Seismics', desc: 'Subsurface imaging and quantitative interpretation.', icon: 'fa-wave-square' },
               { title: 'Hydrogeology & Water', desc: 'Aquifer protection and sustainable water management.', icon: 'fa-droplet' },
-              { title: 'Geo-Engineering', desc: 'Foundation testing and soil mechanics for infrastructure.', icon: 'fa-hard-hat' },
+              { title: 'Geoscience & Environment', desc: 'Foundation testing and soil mechanics for infrastructure.', icon: 'fa-hard-hat' },
               { title: 'Environmental Geology', desc: 'Climate impact studies and subsurface contamination control.', icon: 'fa-leaf' }
             ].map((discipline) => (
               <div key={discipline.title} className="bg-white rounded-2xl p-6 border border-sand/40 shadow-xs hover:shadow-md transition">
@@ -289,9 +353,9 @@ export default function HomePage() {
       {/* ───────────────────────────────────────────────────────────── */}
       {/* SECTION 3: FEATURED EVENTS & NEWS SPOTLIGHT + JOIN CTA       */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-gradient-to-b from-sand-light/40 to-cream border-t border-sand/30">
+      <section className="py-10 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-sand-light/40 to-cream border-t border-sand/30">
         <div class="mx-auto max-w-6xl space-y-16">
-          
+
           {/* Header */}
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
             <div>
@@ -327,13 +391,13 @@ export default function HomePage() {
               <div className="flex flex-wrap justify-center gap-4 pt-2">
                 <Link
                   to="/membership/join"
-                  className="rounded-full bg-gradient-to-r from-copper to-copper-light px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg hover:scale-105 transition"
+                  className="rounded-full bg-gradient-to-r from-copper to-copper-light px-5 py-2.5 sm:px-7 sm:py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white shadow-lg hover:scale-105 transition"
                 >
                   Join AGGE Today
                 </Link>
                 <Link
                   to="/communities"
-                  className="rounded-full border border-white/40 px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition"
+                  className="rounded-full border border-white/40 px-5 py-2.5 sm:px-7 sm:py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition"
                 >
                   Explore Chapters
                 </Link>

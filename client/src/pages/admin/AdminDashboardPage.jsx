@@ -644,8 +644,51 @@ export default function AdminDashboardPage() {
   return (
     <div className="flex min-h-[calc(100vh-140px)] flex-col lg:flex-row bg-navy text-slate-100">
       
-      {/* Sidebar Navigation */}
-      <aside className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-slate-800 bg-navy-mid shrink-0">
+      {/* Mobile Top Navigation Pills (< lg) */}
+      <div className="lg:hidden bg-navy-mid border-b border-slate-800 p-3 space-y-2.5 shrink-0">
+        <div className="flex items-center justify-between px-1">
+          <div>
+            <h2 className="text-[10px] font-bold uppercase tracking-widest text-slate-400">AGGE Control Panel</h2>
+            <p className="text-xs font-bold text-white capitalize">{user.role.replace('_', ' ').toLowerCase()}</p>
+          </div>
+          <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-extrabold uppercase">
+            {activeTab}
+          </span>
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {[
+            { id: 'overview', label: 'Overview', restricted: false },
+            { id: 'users', label: 'Users', restricted: true },
+            { id: 'logs', label: 'Audit Logs', restricted: true },
+            { id: 'content', label: 'Content (CMS)', restricted: false },
+            { id: 'events', label: 'Events', restricted: false },
+            { id: 'memberships', label: 'Memberships', restricted: false },
+            { id: 'submissions', label: 'Submissions', restricted: false },
+          ].map((tab) => {
+            if (tab.restricted && !hasFullAccess) return null;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setErrorMsg(null);
+                  setSuccessMsg(null);
+                }}
+                className={`shrink-0 rounded-full px-3 py-1 text-xs font-bold transition cursor-pointer whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? 'bg-emerald-500 text-navy shadow'
+                    : 'bg-slate-900 text-slate-300 border border-slate-800 hover:text-white'
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Desktop Sidebar Navigation (>= lg) */}
+      <aside className="hidden lg:block w-64 border-r border-slate-800 bg-navy-mid shrink-0 min-h-[calc(100vh-140px)]">
         <div className="p-6">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500">AGGE Control Panel</h2>
           <p className="mt-1 text-sm font-bold text-white capitalize">{user.role.replace('_', ' ').toLowerCase()}</p>
@@ -692,7 +735,7 @@ export default function AdminDashboardPage() {
       </aside>
 
       {/* Main Board Area */}
-      <main className="flex-1 p-8 lg:p-10">
+      <main className="flex-1 p-4 sm:p-6 lg:p-10 overflow-x-hidden">
         
         {/* Success/Error Banners */}
         {successMsg && (
@@ -740,7 +783,7 @@ export default function AdminDashboardPage() {
                   </div>
                   <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6">
                     <p className="text-sm font-semibold uppercase tracking-wider text-slate-500">Total Payments</p>
-                    <p className="text-3xl font-extrabold text-white mt-2">{stats?.revenueTotal.toFixed(2)} EUR</p>
+                    <p className="text-3xl font-extrabold text-white mt-2">{stats?.revenueTotal.toFixed(2)} DT</p>
                   </div>
                 </div>
               )}
@@ -938,8 +981,8 @@ export default function AdminDashboardPage() {
                             </span>
                           </td>
                           <td className="p-4 text-xs">
-                            <p>Mem: {Number(evt.priceMember) === 0 ? 'Free' : `${Number(evt.priceMember)} EUR`}</p>
-                            <p className="text-slate-500">Non-Mem: {Number(evt.priceNonMember) === 0 ? 'Free' : `${Number(evt.priceNonMember)} EUR`}</p>
+                            <p>Mem: {Number(evt.priceMember) === 0 ? 'Free' : `${Number(evt.priceMember)} DT`}</p>
+                            <p className="text-slate-500">Non-Mem: {Number(evt.priceNonMember) === 0 ? 'Free' : `${Number(evt.priceNonMember)} DT`}</p>
                           </td>
                           <td className="p-4 text-right space-x-2 whitespace-nowrap">
                             <Link
@@ -974,8 +1017,8 @@ export default function AdminDashboardPage() {
 
               {/* Event Creation/Edit Modal Form */}
               {isEventFormOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-                  <div className="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-2 sm:p-4 backdrop-blur-sm">
+                  <div className="w-full max-w-lg sm:max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-6 shadow-2xl overflow-y-auto max-h-[90vh] text-xs sm:text-sm mx-2">
                     <div className="mb-6 flex items-center justify-between">
                       <h4 className="text-lg font-bold text-white">
                         {editingEvent ? `Edit Event: ${editingEvent.title}` : 'Create New Event'}
@@ -1119,7 +1162,7 @@ export default function AdminDashboardPage() {
 
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div>
-                          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Member Pricing (EUR)</label>
+                          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Member Pricing (DT)</label>
                           <input
                             type="number"
                             min="0"
@@ -1130,7 +1173,7 @@ export default function AdminDashboardPage() {
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Non-Member Pricing (EUR)</label>
+                          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Non-Member Pricing (DT)</label>
                           <input
                             type="number"
                             min="0"
@@ -1198,7 +1241,7 @@ export default function AdminDashboardPage() {
                       <div key={plan.id} className="rounded-xl border border-slate-800 bg-slate-900/10 p-5 flex flex-col justify-between">
                         <div>
                           <h5 className="font-semibold text-white text-sm">{plan.name}</h5>
-                          <p className="mt-2 text-base font-bold text-emerald-400">€{Number(plan.price).toFixed(2)} EUR</p>
+                          <p className="mt-2 text-base font-bold text-emerald-400">{Number(plan.price).toFixed(0)} DT / year</p>
                           <p className="mt-2 text-xs text-slate-400 leading-relaxed min-h-[48px]">{plan.description}</p>
                           <p className="mt-2 text-[10px] text-slate-500">Duration: {plan.durationMonths} months</p>
                         </div>
@@ -1254,7 +1297,7 @@ export default function AdminDashboardPage() {
                                 <p className="text-xs text-slate-500">{email}</p>
                               </td>
                               <td className="p-4 text-xs font-medium text-slate-200">{label}</td>
-                              <td className="p-4 font-semibold text-white">€{Number(pay.amount).toFixed(2)}</td>
+                              <td className="p-4 font-semibold text-white">{Number(pay.amount).toFixed(2)} DT</td>
                               <td className="p-4">
                                 <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold ${
                                   pay.status === 'COMPLETED'
@@ -1278,8 +1321,8 @@ export default function AdminDashboardPage() {
 
               {/* Plan Edit Modal */}
               {isPlanModalOpen && editingPlan && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-                  <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-2 sm:p-4 backdrop-blur-sm">
+                  <div className="w-full max-w-sm sm:max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-6 shadow-2xl text-xs sm:text-sm mx-2">
                     <div className="mb-6 flex items-center justify-between">
                       <h4 className="text-base font-bold text-white">Edit Plan Price: {editingPlan.name}</h4>
                       <button
@@ -1293,7 +1336,7 @@ export default function AdminDashboardPage() {
 
                     <form onSubmit={handleUpdatePlanSubmit} className="space-y-4 text-left">
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Annual Price (EUR)</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Annual Price (DT)</label>
                         <input
                           type="number"
                           required
@@ -1617,8 +1660,8 @@ export default function AdminDashboardPage() {
 
               {/* Article Edit/Create Modal */}
               {isArticleModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-                  <div className="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-2 sm:p-4 backdrop-blur-sm">
+                  <div className="w-full max-w-lg sm:max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-6 shadow-2xl overflow-y-auto max-h-[90vh] text-xs sm:text-sm mx-2">
                     <div className="mb-6 flex items-center justify-between border-b border-slate-800 pb-3">
                       <h4 className="text-base font-bold text-white">{editingArticle ? 'Edit Article Details' : 'Publish New Article'}</h4>
                       <button

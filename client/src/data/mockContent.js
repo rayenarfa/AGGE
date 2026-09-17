@@ -62,7 +62,7 @@ export const events = [
     title: 'AGGE Annual Conference 2025',
     dates: '27–31 October 2025',
     location: 'Hannover, Germany',
-    excerpt: 'The flagship multi-disciplinary geoscience and engineering meeting of the year.',
+    excerpt: 'The flagship multi-disciplinary geophysics, geoscience and environment meeting of the year.',
     earlyBird: null,
     cta: 'View recap',
     past: true,
@@ -178,7 +178,7 @@ export const communities = [
   },
   {
     slug: 'women-in-geoscience',
-    name: 'Women in Geoscience & Engineering',
+    name: 'Women in Geophysics, Geoscience & Environment',
     focus: 'Mentoring, visibility, and inclusive practices across the geoscience profession.',
     members: '2,900+',
   },
@@ -273,19 +273,27 @@ export const teamMembers = [
 
 export const membershipPlans = [
   {
-    name: 'Individual Professional',
-    price: '€185 / year',
-    features: ['Full event discounts', 'Learning Geoscience access', 'Digital newsletters', 'Community membership'],
+    name: 'Student and Early-Career Member',
+    price: '30 TND / year',
+    popular: false,
+    features: [
+      'Access to AGGE digital newsletters and scientific publications',
+      'Reduced registration fees for AGGE workshops & training courses',
+      'Professional networking with international Earth science researchers',
+      'Participation in student and young-researcher activities & competitions',
+    ],
   },
   {
-    name: 'Student',
-    price: '€35 / year',
-    features: ['All individual benefits', 'Student competitions', 'Mentoring programme', 'Chapter activities'],
-  },
-  {
-    name: 'Corporate',
-    price: 'From €1,200 / year',
-    features: ['Up to 10 named members', 'Brand visibility at events', 'Training packages', 'Recruitment access'],
+    name: 'Professional Member',
+    price: '50 TND / year',
+    popular: true,
+    features: [
+      'Access to AGGE digital newsletters and technical reports',
+      'Substantial discounts on workshops, conferences & training courses',
+      'Professional networking across academia, industry & government',
+      'Direct participation in AGGE working groups & collaborative projects',
+      'Voting rights where permitted by the association\'s statutes',
+    ],
   },
 ];
 
@@ -299,15 +307,19 @@ export const journals = [
 export const pageContent = {
   about: {
     title: 'About AGGE',
-    subtitle: 'Advancing geoscience and engineering knowledge worldwide',
+    subtitle: 'Association for Geophysics, Geoscience and Environment',
     sections: [
       {
-        heading: 'Who we are',
-        body: 'The Association of Geoscientists & Geophysical Engineers (AGGE) is a global non-profit connecting professionals who explore, characterise, and manage the subsurface. With members in over 110 countries, we foster collaboration across academia, industry, and government.',
+        heading: 'Our Mission',
+        body: 'The Association for Geophysics, Geosciences and Environment (AGGE) is a scientific association dedicated to promoting cooperation among researchers, academics, professionals, and institutions at both national and international levels. It aims to enhance the value and visibility of scientific research in the fields of geophysics, geosciences, and environmental sciences, while fostering the exchange of knowledge and expertise and encouraging the use of modern technologies and digital tools. Through its scientific activities, training programmes, conferences, and collaborative projects, AGGE contributes to the development of Earth science applications in support of society and sustainable development.',
       },
       {
-        heading: 'Our mission',
-        body: 'We advance scientific excellence, support professional development, and promote responsible stewardship of Earth resources through conferences, education, publications, and technical communities.',
+        heading: 'Who AGGE Belongs To',
+        body: 'Anyone studying, researching, teaching, or working in geosciences or related fields is welcome to join the association and contribute to its activities:\n\n• University researchers and teachers\n• Professional geologists, geophysicists, and engineers\n• Students and young researchers in Earth sciences\n• Environmental and energy policy experts\n• Corporate sponsors and energy companies',
+      },
+      {
+        heading: 'Core Values & Strategic Objectives',
+        body: 'AGGE operates on four core values:\n1. Technical Excellence: High-standard scientific research and rigorous methodology.\n2. Protecting the Environment: Promoting sustainable development, water security, and resource stewardship.\n3. Scientific Innovation: Encouraging modern digital tools, software, and Earth science technologies.\n4. Academia & Industry Synergy: Promoting research outcomes and strengthening collaboration between academia and socioeconomic stakeholders.',
       },
     ],
   },

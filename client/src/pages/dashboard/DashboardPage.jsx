@@ -77,7 +77,7 @@ export default function DashboardPage() {
 
     try {
       await updateProfile({ firstName, lastName, email });
-      await reloadUser(); // sync layout header and state
+      await reloadUser();
       setProfileSuccess('Profile details updated successfully');
     } catch (err) {
       setProfileError(err.response?.data?.error || 'Failed to update profile details.');
@@ -116,7 +116,6 @@ export default function DashboardPage() {
     }
   };
 
-  // Helper: check if membership is expiring soon (<30 days)
   const isExpiringSoon = (endDateStr) => {
     if (!endDateStr) return false;
     const end = new Date(endDateStr);
@@ -144,23 +143,36 @@ export default function DashboardPage() {
   const courses = dbData?.courses || [];
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white tracking-tight">My Dashboard</h1>
-        <p className="mt-1 text-slate-400">Welcome, {user.firstName} {user.lastName} ({user.email})</p>
+    <div className="mx-auto max-w-6xl px-6 py-12 font-sans bg-cream min-h-[85vh]">
+      
+      {/* Header */}
+      <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-sand/40 pb-6">
+        <div>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-copper">Member Portal</span>
+          <h1 className="text-3xl font-display font-bold text-navy mt-0.5">My Account Dashboard</h1>
+          <p className="mt-1 text-xs text-text-muted">Welcome back, <strong className="text-navy">{user.firstName} {user.lastName}</strong> ({user.email})</p>
+        </div>
+
+        {/* Action button */}
+        <Link
+          to="/membership/join"
+          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-copper to-copper-light px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md hover:scale-105 transition self-start md:self-auto"
+        >
+          <i className="fas fa-id-card text-sand" /> Membership Overview
+        </Link>
       </div>
 
       {/* Expiry alerts */}
       {membership && isExpiringSoon(membership.endDate) && (
-        <div className="mb-6 rounded-xl border border-yellow-500/20 bg-yellow-950/20 p-4 text-sm text-yellow-400">
+        <div className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-xs text-amber-900 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="font-semibold text-lg">Membership Expiring Soon!</p>
-              <p className="mt-0.5 opacity-90">Your AGGE membership ends on {new Date(membership.endDate).toLocaleDateString()}. Renew now to retain access to events and forums.</p>
+              <p className="font-bold text-sm text-amber-950">Membership Expiring Soon!</p>
+              <p className="mt-0.5 text-amber-800">Your AGGE membership ends on {new Date(membership.endDate).toLocaleDateString()}. Renew now to retain full member rates and privileges.</p>
             </div>
             <Link
               to="/membership/renew"
-              className="shrink-0 rounded-lg bg-yellow-600 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-yellow-500"
+              className="shrink-0 rounded-full bg-amber-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-amber-700 shadow"
             >
               Renew Membership
             </Link>
@@ -169,15 +181,15 @@ export default function DashboardPage() {
       )}
 
       {membership && isExpired(membership.endDate) && (
-        <div className="mb-6 rounded-xl border border-red-500/20 bg-red-950/20 p-4 text-sm text-red-400">
+        <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-xs text-red-900 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="font-semibold text-lg">Membership Expired</p>
-              <p className="mt-0.5 opacity-90">Your AGGE membership expired on {new Date(membership.endDate).toLocaleDateString()}. Please renew to activate your benefits.</p>
+              <p className="font-bold text-sm text-red-950">Membership Inactive / Expired</p>
+              <p className="mt-0.5 text-red-800">Your AGGE membership expired on {new Date(membership.endDate).toLocaleDateString()}. Please subscribe or upload your renewal receipt.</p>
             </div>
             <Link
               to="/membership/renew"
-              className="shrink-0 rounded-lg bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-500"
+              className="shrink-0 rounded-full bg-red-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-red-700 shadow"
             >
               Renew Membership
             </Link>
@@ -185,82 +197,89 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Tabs */}
-      <div className="mb-8 border-b border-slate-800">
-        <div className="flex gap-2">
-          {['overview', 'membership', 'profile'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-3 text-sm font-semibold tracking-wide capitalize border-b-2 transition cursor-pointer ${
-                activeTab === tab
-                  ? 'border-emerald-500 text-white'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {tab === 'profile' ? 'Profile Settings' : tab}
-            </button>
-          ))}
-        </div>
+      {/* Navigation Pills */}
+      <div className="mb-8 flex gap-3 border-b border-sand/30 pb-4">
+        {[
+          { id: 'overview', label: 'Dashboard Overview', icon: 'fas fa-chart-line' },
+          { id: 'membership', label: 'Transactions & Payments', icon: 'fas fa-receipt' },
+          { id: 'profile', label: 'Profile & Security', icon: 'fas fa-user-cog' },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`rounded-full px-5 py-2.5 text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+              activeTab === tab.id
+                ? 'bg-navy text-white shadow-md'
+                : 'bg-white text-navy border border-sand/50 hover:bg-cream'
+            }`}
+          >
+            <i className={tab.icon} /> {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* DB Error Check */}
+      {/* DB Error */}
       {dbError && (
-        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-950/20 p-4 text-sm text-red-400">
+        <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-xs text-red-700">
           <p>{dbError}</p>
-          <button onClick={fetchDashboardData} className="mt-2 text-xs font-semibold text-emerald-400 hover:underline">
+          <button onClick={fetchDashboardData} className="mt-2 text-xs font-bold text-copper hover:underline">
             Retry Load
           </button>
         </div>
       )}
 
-      {/* Tab Contents */}
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Main Content Area */}
-        <div className="lg:col-span-2 space-y-8 animate-fadeIn">
+      {/* Main Dashboard Layout */}
+      <div className="grid gap-8 lg:grid-cols-3 items-start">
+        
+        {/* Main Left Column */}
+        <div className="lg:col-span-2 space-y-8">
           
           {activeTab === 'overview' && (
             <>
-              {/* Quick stats grid */}
+              {/* Stats Cards */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-4 text-center">
-                  <p className="text-2xl font-bold text-white">{events.length}</p>
-                  <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Events Registered</p>
+                <div className="rounded-2xl border border-sand/40 bg-white p-5 text-center shadow-sm">
+                  <p className="text-3xl font-display font-bold text-navy">{events.length}</p>
+                  <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wider font-bold">Events Registered</p>
                 </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-4 text-center">
-                  <p className="text-2xl font-bold text-white">{courses.length}</p>
-                  <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Courses Enrolled</p>
+                <div className="rounded-2xl border border-sand/40 bg-white p-5 text-center shadow-sm">
+                  <p className="text-3xl font-display font-bold text-navy">{courses.length}</p>
+                  <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wider font-bold">Courses Enrolled</p>
                 </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-4 text-center">
-                  <p className="text-2xl font-bold text-white">{payments.length}</p>
-                  <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Transactions</p>
+                <div className="rounded-2xl border border-sand/40 bg-white p-5 text-center shadow-sm">
+                  <p className="text-3xl font-display font-bold text-copper">{payments.length}</p>
+                  <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wider font-bold">Transactions</p>
                 </div>
               </div>
 
               {/* Registered Events */}
-              <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">My Events</h3>
+              <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm">
+                <div className="flex items-center justify-between mb-4 border-b border-sand/30 pb-3">
+                  <h3 className="text-base font-display font-bold text-navy">My Registered Events</h3>
+                  <Link to="/events" className="text-xs font-bold text-copper hover:underline">Browse All →</Link>
+                </div>
+
                 {events.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-sm text-slate-500">You are not registered for any upcoming events.</p>
-                    <Link to="/events" className="mt-2 inline-block text-xs font-semibold text-emerald-400 hover:underline">
-                      Explore AGGE Events
+                  <div className="text-center py-8 bg-cream/50 rounded-2xl border border-sand/30">
+                    <p className="text-xs text-text-muted">You are not registered for any upcoming AGGE events.</p>
+                    <Link to="/events" className="mt-2 inline-block text-xs font-bold text-copper hover:underline">
+                      Explore Conferences &amp; Workshops
                     </Link>
                   </div>
                 ) : (
-                  <div className="divide-y divide-slate-800">
+                  <div className="divide-y divide-sand/30">
                     {events.map((evt) => (
-                      <div key={evt.registrationId} className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
+                      <div key={evt.registrationId} className="flex items-center justify-between py-3.5 first:pt-0 last:pb-0">
                         <div>
-                          <Link to={`/events/${evt.eventType.toLowerCase()}s/${evt.slug}`} className="font-semibold text-white hover:text-emerald-400 transition">
+                          <Link to={`/events/${evt.eventType.toLowerCase()}s/${evt.slug}`} className="font-bold text-navy hover:text-copper transition text-sm">
                             {evt.title}
                           </Link>
-                          <p className="text-xs text-slate-400 mt-1">
-                            {new Date(evt.startDate).toLocaleDateString()} {evt.location ? `• ${evt.location}` : '• Online'}
+                          <p className="text-xs text-text-muted mt-0.5">
+                            {new Date(evt.startDate).toLocaleDateString()} {evt.location ? `• ${evt.location}` : '• Online Access'}
                           </p>
                         </div>
-                        <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                          evt.status === 'REGISTERED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-400'
+                        <span className={`rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider ${
+                          evt.status === 'REGISTERED' ? 'bg-sage/20 text-sage border border-sage/30' : 'bg-amber-100 text-amber-800'
                         }`}>
                           {evt.status}
                         </span>
@@ -271,27 +290,31 @@ export default function DashboardPage() {
               </div>
 
               {/* Enrolled Courses */}
-              <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">My Courses</h3>
+              <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm">
+                <div className="flex items-center justify-between mb-4 border-b border-sand/30 pb-3">
+                  <h3 className="text-base font-display font-bold text-navy">My Geoscience Courses</h3>
+                  <Link to="/education" className="text-xs font-bold text-copper hover:underline">Course Catalog →</Link>
+                </div>
+
                 {courses.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-sm text-slate-500">You are not enrolled in any training courses.</p>
-                    <Link to="/education" className="mt-2 inline-block text-xs font-semibold text-emerald-400 hover:underline">
-                      View Course Catalog
+                  <div className="text-center py-8 bg-cream/50 rounded-2xl border border-sand/30">
+                    <p className="text-xs text-text-muted">You are not enrolled in any training courses.</p>
+                    <Link to="/education" className="mt-2 inline-block text-xs font-bold text-copper hover:underline">
+                      View Short Courses &amp; Webinars
                     </Link>
                   </div>
                 ) : (
-                  <div className="divide-y divide-slate-800">
+                  <div className="divide-y divide-sand/30">
                     {courses.map((crs) => (
-                      <div key={crs.enrollmentId} className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
+                      <div key={crs.enrollmentId} className="flex items-center justify-between py-3.5 first:pt-0 last:pb-0">
                         <div>
-                          <p className="font-semibold text-white">{crs.title}</p>
-                          <p className="text-xs text-slate-400 mt-1">
+                          <p className="font-bold text-navy text-sm">{crs.title}</p>
+                          <p className="text-xs text-text-muted mt-0.5">
                             Type: {crs.courseType.replace('_', ' ')} {crs.instructor ? `• Instructor: ${crs.instructor}` : ''}
                           </p>
                         </div>
-                        <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                          crs.status === 'ENROLLED' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-slate-800 text-slate-400'
+                        <span className={`rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider ${
+                          crs.status === 'ENROLLED' ? 'bg-navy/10 text-navy border border-navy/20' : 'bg-slate-100 text-slate-600'
                         }`}>
                           {crs.status}
                         </span>
@@ -304,30 +327,33 @@ export default function DashboardPage() {
           )}
 
           {activeTab === 'membership' && (
-            <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-6">
-              <h3 className="text-lg font-semibold text-white mb-6">Transaction History</h3>
+            <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm">
+              <h3 className="text-base font-display font-bold text-navy mb-6 border-b border-sand/30 pb-3">Transaction History</h3>
+              
               {payments.length === 0 ? (
-                <p className="text-sm text-slate-500 text-center py-8">No payments logged under your account.</p>
+                <div className="text-center py-10 bg-cream/50 rounded-2xl border border-sand/30">
+                  <p className="text-xs text-text-muted">No payments or receipt submissions logged under your account.</p>
+                </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm text-slate-300">
+                  <table className="w-full text-left text-xs text-navy">
                     <thead>
-                      <tr className="border-b border-slate-800 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                        <th className="pb-3">Date</th>
-                        <th className="pb-3">Description</th>
-                        <th className="pb-3">Amount</th>
-                        <th className="pb-3 text-right">Status</th>
+                      <tr className="border-b border-sand/40 text-[10px] font-bold uppercase tracking-wider text-text-muted bg-cream/50">
+                        <th className="p-3">Date</th>
+                        <th className="p-3">Description</th>
+                        <th className="p-3">Amount (DT)</th>
+                        <th className="p-3 text-right">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60">
+                    <tbody className="divide-y divide-sand/30">
                       {payments.map((p) => (
-                        <tr key={p.id} className="hover:bg-slate-900/20">
-                          <td className="py-3.5">{new Date(p.createdAt).toLocaleDateString()}</td>
-                          <td className="py-3.5 font-medium text-white">{p.description}</td>
-                          <td className="py-3.5">{p.amount.toFixed(2)} {p.currency}</td>
-                          <td className="py-3.5 text-right">
-                            <span className={`rounded px-2 py-0.5 text-xs font-semibold ${
-                              p.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400'
+                        <tr key={p.id} className="hover:bg-cream/40 transition">
+                          <td className="p-3 text-text-muted">{new Date(p.createdAt).toLocaleDateString()}</td>
+                          <td className="p-3 font-bold text-navy">{p.description}</td>
+                          <td className="p-3 font-extrabold text-copper">{Number(p.amount).toFixed(0)} DT</td>
+                          <td className="p-3 text-right">
+                            <span className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-extrabold ${
+                              p.status === 'COMPLETED' ? 'bg-sage/20 text-sage' : 'bg-amber-100 text-amber-800'
                             }`}>
                               {p.status}
                             </span>
@@ -343,56 +369,59 @@ export default function DashboardPage() {
 
           {activeTab === 'profile' && (
             <div className="space-y-6">
+              
               {/* Profile Details Form */}
-              <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-6">
-                <h3 className="text-lg font-semibold text-white mb-6">Profile Settings</h3>
+              <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm">
+                <h3 className="text-base font-display font-bold text-navy mb-6 border-b border-sand/30 pb-3">Profile Information</h3>
+                
                 {profileSuccess && (
-                  <div className="mb-4 rounded-lg border border-emerald-500/20 bg-emerald-950/20 p-3 text-sm text-emerald-400">
+                  <div className="mb-4 rounded-xl border border-sage/40 bg-sage/10 p-3 text-xs font-semibold text-sage">
                     {profileSuccess}
                   </div>
                 )}
                 {profileError && (
-                  <div className="mb-4 rounded-lg border border-red-500/20 bg-red-950/20 p-3 text-sm text-red-400">
+                  <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
                     {profileError}
                   </div>
                 )}
+
                 <form onSubmit={handleUpdateProfile} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">First Name</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">First Name</label>
                       <input
                         type="text"
                         required
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2 text-sm text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                        className="w-full rounded-xl border border-sand/50 bg-cream px-4 py-2.5 text-xs text-navy focus:border-copper focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Last Name</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Last Name</label>
                       <input
                         type="text"
                         required
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2 text-sm text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                        className="w-full rounded-xl border border-sand/50 bg-cream px-4 py-2.5 text-xs text-navy focus:border-copper focus:outline-none"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Email Address</label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Email Address</label>
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2 text-sm text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                      className="w-full rounded-xl border border-sand/50 bg-cream px-4 py-2.5 text-xs text-navy focus:border-copper focus:outline-none"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={isUpdatingProfile}
-                    className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:opacity-50 cursor-pointer"
+                    className="rounded-full bg-navy hover:bg-navy-mid px-6 py-2.5 text-xs font-bold text-white transition disabled:opacity-50 cursor-pointer"
                   >
                     {isUpdatingProfile ? 'Saving...' : 'Save Profile Changes'}
                   </button>
@@ -400,50 +429,52 @@ export default function DashboardPage() {
               </div>
 
               {/* Password Form */}
-              <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-6">
-                <h3 className="text-lg font-semibold text-white mb-6">Change Password</h3>
+              <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm">
+                <h3 className="text-base font-display font-bold text-navy mb-6 border-b border-sand/30 pb-3">Change Security Password</h3>
+                
                 {passwordSuccess && (
-                  <div className="mb-4 rounded-lg border border-emerald-500/20 bg-emerald-950/20 p-3 text-sm text-emerald-400">
+                  <div className="mb-4 rounded-xl border border-sage/40 bg-sage/10 p-3 text-xs font-semibold text-sage">
                     {passwordSuccess}
                   </div>
                 )}
                 {passwordError && (
-                  <div className="mb-4 rounded-lg border border-red-500/20 bg-red-950/20 p-3 text-sm text-red-400">
+                  <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
                     {passwordError}
                   </div>
                 )}
+
                 <form onSubmit={handleUpdatePassword} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Current Password</label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Current Password</label>
                     <input
                       type="password"
                       required
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2 text-sm text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                      className="w-full rounded-xl border border-sand/50 bg-cream px-4 py-2.5 text-xs text-navy focus:border-copper focus:outline-none"
                       placeholder="••••••••"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">New Password</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">New Password</label>
                       <input
                         type="password"
                         required
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2 text-sm text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                        className="w-full rounded-xl border border-sand/50 bg-cream px-4 py-2.5 text-xs text-navy focus:border-copper focus:outline-none"
                         placeholder="••••••••"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Confirm New Password</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Confirm New Password</label>
                       <input
                         type="password"
                         required
                         value={confirmNewPassword}
                         onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        className="mt-1.5 w-full rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-2 text-sm text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                        className="w-full rounded-xl border border-sand/50 bg-cream px-4 py-2.5 text-xs text-navy focus:border-copper focus:outline-none"
                         placeholder="••••••••"
                       />
                     </div>
@@ -451,12 +482,13 @@ export default function DashboardPage() {
                   <button
                     type="submit"
                     disabled={isUpdatingPassword}
-                    className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:opacity-50 cursor-pointer"
+                    className="rounded-full bg-copper hover:bg-copper-light px-6 py-2.5 text-xs font-bold text-white transition disabled:opacity-50 cursor-pointer shadow"
                   >
-                    {isUpdatingPassword ? 'Updating...' : 'Change Password'}
+                    {isUpdatingPassword ? 'Updating...' : 'Update Password'}
                   </button>
                 </form>
               </div>
+
             </div>
           )}
 
@@ -464,65 +496,76 @@ export default function DashboardPage() {
 
         {/* Sidebar Info Area */}
         <div className="space-y-6">
-          {/* Membership Tier Card */}
-          <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900/30 p-6 shadow-xl">
-            <div className="absolute -top-10 -right-10 -z-10 h-24 w-24 rounded-full bg-emerald-500/5 blur-xl" />
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500">Membership Status</h3>
+          
+          {/* Membership Status Card */}
+          <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm space-y-4">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-copper">Subscription Details</span>
 
             {membership ? (
-              <div className="mt-4 space-y-4">
+              <div className="space-y-4">
                 <div>
-                  <p className="text-xl font-bold text-white">{membership.plan.name}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">Tier Duration: {membership.plan.durationMonths} months</p>
+                  <h4 className="text-xl font-display font-bold text-navy">{membership.plan.name}</h4>
+                  <p className="text-xs text-text-muted mt-0.5 font-medium">Price: {Number(membership.plan.price).toFixed(0)} DT / year</p>
                 </div>
+                
                 <div className="flex items-center gap-2">
                   <span className={`inline-block h-2.5 w-2.5 rounded-full ${
-                    isExpired(membership.endDate) ? 'bg-red-500' : 'bg-emerald-500'
+                    isExpired(membership.endDate) ? 'bg-red-500' : 'bg-sage'
                   }`} />
-                  <span className="text-sm font-semibold text-slate-200">
-                    {isExpired(membership.endDate) ? 'Expired' : 'Active Account'}
+                  <span className="text-xs font-bold text-navy">
+                    {isExpired(membership.endDate) ? 'Subscription Expired' : 'Active Member Account'}
                   </span>
                 </div>
-                <div className="border-t border-slate-800/80 pt-4 space-y-1.5 text-xs text-slate-400">
-                  <p>Start Date: {new Date(membership.startDate).toLocaleDateString()}</p>
-                  <p>Expiry Date: {new Date(membership.endDate).toLocaleDateString()}</p>
+
+                <div className="border-t border-sand/30 pt-3 space-y-1 text-xs text-text-muted font-sans">
+                  <p><strong className="text-navy">Start Date:</strong> {new Date(membership.startDate).toLocaleDateString()}</p>
+                  <p><strong className="text-navy">Renewal Date:</strong> {new Date(membership.endDate).toLocaleDateString()}</p>
                 </div>
+
                 <Link
-                  to="/membership/renew"
-                  className="mt-2 block w-full rounded-lg border border-slate-800 bg-slate-900 text-center py-2 text-xs font-semibold text-slate-300 transition hover:bg-slate-800 hover:text-white"
+                  to="/membership/join"
+                  className="block w-full rounded-full bg-navy text-center py-2.5 text-xs font-bold text-white hover:bg-navy-mid transition shadow-sm"
                 >
-                  Manage Membership
+                  Manage Membership Tier
                 </Link>
               </div>
             ) : (
-              <div className="mt-4 space-y-3">
-                <p className="text-sm text-slate-400">No active membership found.</p>
+              <div className="space-y-3 pt-1">
+                <p className="text-xs text-text-muted">No active membership subscription linked to this account.</p>
                 <Link
                   to="/membership/join"
-                  className="block w-full rounded-lg bg-emerald-600 text-center py-2 text-xs font-semibold text-white transition hover:bg-emerald-500"
+                  className="block w-full rounded-full bg-gradient-to-r from-copper to-copper-light text-center py-2.5 text-xs font-bold text-white hover:scale-105 transition shadow"
                 >
-                  Join AGGE
+                  Join AGGE (30 DT / 50 DT)
                 </Link>
               </div>
             )}
           </div>
 
-          {/* Quick links block */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-6">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">Quick Links</h4>
-            <ul className="space-y-2 text-sm">
+          {/* Quick Links Card */}
+          <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-navy mb-3 border-b border-sand/30 pb-2">Quick Navigation</h4>
+            <ul className="space-y-2 text-xs font-semibold">
               <li>
-                <Link to="/events/calendar" className="text-slate-400 hover:text-emerald-400 transition">View Events Calendar</Link>
+                <Link to="/events" className="text-text-muted hover:text-copper transition flex items-center gap-2">
+                  <i className="fas fa-calendar-alt text-copper" /> View Events Calendar
+                </Link>
               </li>
               <li>
-                <Link to="/education/courses" className="text-slate-400 hover:text-emerald-400 transition">Browse Geoscience Courses</Link>
+                <Link to="/education" className="text-text-muted hover:text-copper transition flex items-center gap-2">
+                  <i className="fas fa-graduation-cap text-copper" /> Browse Courses &amp; Workshops
+                </Link>
               </li>
               <li>
-                <Link to="/communities" className="text-slate-400 hover:text-emerald-400 transition">Explore Communities & SIGs</Link>
+                <Link to="/sponsors" className="text-text-muted hover:text-copper transition flex items-center gap-2">
+                  <i className="fas fa-handshake text-copper" /> Become a Sponsor / Partner
+                </Link>
               </li>
             </ul>
           </div>
+
         </div>
+
       </div>
     </div>
   );

@@ -256,7 +256,7 @@ export function CommunityDetailPage() {
         sections: [
           {
             heading: 'About this community',
-            body: `${community.name} brings together AGGE members working on specialised topics within geoscience and engineering. Join discussions, access shared resources, and participate in community-led webinars.`,
+            body: `${community.name} brings together AGGE members working on specialised topics within geophysics, geoscience and environment. Join discussions, access shared resources, and participate in community-led webinars.`,
           },
           {
             heading: 'Activities',

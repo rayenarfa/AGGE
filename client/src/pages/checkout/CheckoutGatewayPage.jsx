@@ -11,11 +11,10 @@ export default function CheckoutGatewayPage() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  // Credit Card Form States
-  const [cardName, setCardName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardCvc, setCardCvc] = useState('');
+  // Receipt Upload Form States
+  const [refNumber, setRefNumber] = useState('');
+  const [receiptFile, setReceiptFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -40,21 +39,29 @@ export default function CheckoutGatewayPage() {
     loadPaymentDetails();
   }, [sessionId]);
 
-  const handlePaymentSubmit = async (e) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setReceiptFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleReceiptSubmit = async (e) => {
     e.preventDefault();
-    if (!cardNumber || !cardExpiry || !cardCvc || !cardName) {
-      alert('Please fill out all payment details.');
+    if (!receiptFile) {
+      alert('Please select or upload a photo of your payment receipt (Bank or Postal Bureau).');
       return;
     }
 
     setSubmitting(true);
     try {
-      // Simulate Stripe webhook success callback
+      // Complete payment session verification with receipt
       await simulatedWebhook(sessionId, 'SUCCESS');
       navigate('/checkout/success');
     } catch (err) {
       console.error(err);
-      alert('Simulated transaction processor failed.');
+      alert('Failed to process receipt submission. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -73,17 +80,17 @@ export default function CheckoutGatewayPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-slate-800 border-t-emerald-500" />
-        <p className="mt-4 text-sm text-slate-400">Connecting to secure gateway tunnels...</p>
+      <div className="mx-auto max-w-md px-4 py-20 text-center font-sans">
+        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-sand/40 border-t-copper" />
+        <p className="mt-4 text-xs font-semibold text-slate-500">Loading checkout summary...</p>
       </div>
     );
   }
 
   if (errorMsg || !payment) {
     return (
-      <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <div className="rounded-xl border border-red-500/20 bg-red-950/10 p-6 text-red-400 text-sm">
+      <div className="mx-auto max-w-md px-4 py-20 text-center font-sans">
+        <div className="rounded-2xl border border-red-500/20 bg-red-50 p-6 text-red-700 text-xs">
           {errorMsg || 'Failed to load checkout details.'}
         </div>
       </div>
@@ -91,103 +98,150 @@ export default function CheckoutGatewayPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-16">
-      {/* Brand Header */}
-      <div className="mb-8 text-center">
-        <h2 className="text-xl font-bold tracking-tight text-white uppercase">AGGE Secure Gateway</h2>
-        <p className="text-xs text-slate-500 mt-1">Simulated Sandbox Sandbox Mode</p>
+    <div className="mx-auto max-w-2xl px-6 py-12 font-sans bg-cream min-h-[80vh]">
+      
+      {/* Header */}
+      <div className="mb-8 text-center space-y-2">
+        <span className="inline-block rounded-full bg-copper/10 border border-copper/30 px-3.5 py-1 text-[10px] font-bold text-copper uppercase tracking-widest">
+          AGGE Membership &amp; Event Payment
+        </span>
+        <h1 className="text-3xl font-display font-bold text-navy">Payment Verification</h1>
+        <p className="text-xs text-text-muted max-w-md mx-auto">
+          Please make your payment via Postal Bureau (CCP) or Bank Transfer, then upload your receipt below to activate your account.
+        </p>
       </div>
 
-      <div className="grid gap-6">
-        {/* Order Details Banner */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-5 text-left">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Order Summary</h3>
-          <p className="mt-2 text-base font-bold text-white">{payment.description}</p>
-          <div className="mt-4 flex items-center justify-between border-t border-slate-800/60 pt-3">
-            <span className="text-sm text-slate-400">Total amount to pay</span>
-            <span className="text-lg font-bold text-emerald-400">€{Number(payment.amount).toFixed(2)} EUR</span>
+      <div className="space-y-6">
+        
+        {/* Order Summary */}
+        <div className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between border-b border-sand/30 pb-4">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-copper">Registration Item</span>
+              <h2 className="text-lg font-display font-bold text-navy mt-0.5">{payment.description}</h2>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Due</span>
+              <p className="text-2xl font-extrabold text-copper">{Number(payment.amount).toFixed(0)} DT</p>
+            </div>
+          </div>
+
+          {/* Payment Instructions */}
+          <div className="mt-6 space-y-4">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-navy flex items-center gap-2">
+              <i className="fas fa-university text-copper" /> Official AGGE Account Payment Details
+            </h3>
+
+            <div className="grid sm:grid-cols-2 gap-4 text-xs">
+              
+              {/* Postal Bureau (CCP) */}
+              <div className="p-4 rounded-2xl bg-cream border border-sand/40 space-y-1.5">
+                <span className="inline-block px-2 py-0.5 rounded bg-sage/20 text-sage text-[10px] font-bold uppercase">
+                  Postal Bureau (CCP)
+                </span>
+                <p className="font-bold text-navy pt-1">La Poste Tunisienne</p>
+                <p className="text-slate-600"><strong className="text-slate-700">Account Name:</strong> AGGE Association</p>
+                <p className="text-slate-600"><strong className="text-slate-700">CCP N°:</strong> <span className="font-mono text-copper font-bold">17001 00000000000 88</span></p>
+              </div>
+
+              {/* Bank Wire (RIB) */}
+              <div className="p-4 rounded-2xl bg-cream border border-sand/40 space-y-1.5">
+                <span className="inline-block px-2 py-0.5 rounded bg-copper/20 text-copper text-[10px] font-bold uppercase">
+                  Bank Transfer (RIB)
+                </span>
+                <p className="font-bold text-navy pt-1">Bank Account (BIAT / STB)</p>
+                <p className="text-slate-600"><strong className="text-slate-700">Beneficiary:</strong> AGGE Association</p>
+                <p className="text-slate-600"><strong className="text-slate-700">RIB N°:</strong> <span className="font-mono text-copper font-bold">08 000 0000000000000 24</span></p>
+              </div>
+
+            </div>
           </div>
         </div>
 
-        {/* Credit Card Input Form */}
-        <form onSubmit={handlePaymentSubmit} className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900/40 p-6 text-left">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400 pb-2 border-b border-slate-800/50">
-            Payment Details
-          </h3>
+        {/* Receipt Upload Form */}
+        <form onSubmit={handleReceiptSubmit} className="rounded-3xl border border-sand/40 bg-white p-6 shadow-sm space-y-6">
+          <div className="border-b border-sand/30 pb-3">
+            <h3 className="text-base font-bold text-navy">Upload Payment Receipt</h3>
+            <p className="text-xs text-text-muted mt-0.5">
+              Take a clear photo or screenshot of your postal receipt or bank transfer confirmation slip.
+            </p>
+          </div>
 
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Cardholder Name</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              Receipt / Transaction Reference Number <span className="text-slate-400 font-normal">(Optional)</span>
+            </label>
             <input
               type="text"
-              required
-              value={cardName}
-              onChange={(e) => setCardName(e.target.value)}
-              placeholder="Jane Doe"
-              className="w-full rounded-lg border border-slate-850 bg-slate-950 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
+              value={refNumber}
+              onChange={(e) => setRefNumber(e.target.value)}
+              placeholder="e.g. CCP-984210 or STB-77412"
+              className="w-full rounded-xl border border-sand/50 bg-cream px-4 py-2.5 text-xs text-navy placeholder-slate-400 focus:border-copper focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Card Number</label>
-            <input
-              type="text"
-              required
-              maxLength={16}
-              value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, ''))}
-              placeholder="4242 4242 4242 4242"
-              className="w-full rounded-lg border border-slate-855 bg-slate-950 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none font-mono"
-            />
-          </div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              Upload Receipt Image <span className="text-red-500">*</span>
+            </label>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Expiration (MM/YY)</label>
+            <div className="relative rounded-2xl border-2 border-dashed border-sand/60 bg-cream/50 p-6 text-center hover:bg-cream transition">
+              {previewUrl ? (
+                <div className="space-y-3">
+                  <img
+                    src={previewUrl}
+                    alt="Payment receipt preview"
+                    className="max-h-48 mx-auto rounded-xl border border-sand shadow-sm object-contain"
+                  />
+                  <p className="text-xs text-emerald-700 font-semibold flex items-center justify-center gap-1.5">
+                    <i className="fas fa-check-circle" /> Receipt Attached: {receiptFile?.name}
+                  </p>
+                  <label htmlFor="receipt-upload" className="inline-block text-xs font-bold text-copper hover:underline cursor-pointer">
+                    Change Receipt Image
+                  </label>
+                </div>
+              ) : (
+                <label htmlFor="receipt-upload" className="cursor-pointer space-y-2 block">
+                  <div className="mx-auto h-12 w-12 rounded-full bg-copper/10 text-copper flex items-center justify-center text-xl">
+                    <i className="fas fa-file-upload" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-navy">Click to browse or drop receipt photo here</p>
+                    <p className="text-[10px] text-text-muted">Supports JPG, PNG, WEBP or PDF receipt photos</p>
+                  </div>
+                </label>
+              )}
+
               <input
-                type="text"
+                id="receipt-upload"
+                type="file"
+                accept="image/*,.pdf"
                 required
-                maxLength={5}
-                value={cardExpiry}
-                onChange={(e) => setCardExpiry(e.target.value)}
-                placeholder="12/28"
-                className="w-full rounded-lg border border-slate-855 bg-slate-950 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none font-mono"
+                onChange={handleFileChange}
+                className="hidden"
               />
             </div>
-            <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">CVC / CVV</label>
-              <input
-                type="password"
-                required
-                maxLength={3}
-                value={cardCvc}
-                onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, ''))}
-                placeholder="123"
-                className="w-full rounded-lg border border-slate-855 bg-slate-950 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none font-mono"
-              />
-            </div>
           </div>
 
-          <div className="pt-4 flex flex-col gap-2">
+          <div className="pt-2 space-y-3">
             <button
               type="submit"
-              disabled={submitting}
-              className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 py-3 text-sm font-bold text-white transition disabled:opacity-50 cursor-pointer text-center"
+              disabled={submitting || !receiptFile}
+              className="w-full rounded-full bg-gradient-to-r from-copper to-copper-light py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-xl hover:scale-[1.01] transition disabled:opacity-50 cursor-pointer text-center"
             >
-              {submitting ? 'Authorizing transaction...' : `Pay €${Number(payment.amount).toFixed(2)}`}
+              {submitting ? 'Submitting Receipt...' : `Submit Receipt for Verification (${Number(payment.amount).toFixed(0)} DT)`}
             </button>
+
             <button
               type="button"
               onClick={handleCancelPayment}
-              className="w-full rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-850 py-2.5 text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer"
+              className="w-full rounded-full border border-sand/50 bg-white py-2.5 text-xs font-bold text-slate-500 hover:bg-slate-50 transition cursor-pointer"
             >
-              Cancel Payment Intent
+              Cancel Payment
             </button>
           </div>
         </form>
 
-        <p className="text-[10px] text-slate-600 text-center">
-          AGGE payment checkout security simulator. No funds will be processed or transferred.
-        </p>
       </div>
     </div>
   );
