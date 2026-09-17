@@ -1,34 +1,50 @@
-import api from './api';
+import supabase from './supabase';
 
 /**
  * Fetch all available membership plans
  * @returns {Promise<object>} List of plans
  */
 export async function getMembershipPlans() {
-  const response = await api.get('/payments/plans');
-  return response.data;
+  const { data, error } = await supabase
+    .from('MembershipPlan')
+    .select('*')
+    .eq('isActive', true)
+    .order('price', { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return { plans: data || [] };
 }
 
 /**
- * Initialize checkout session
+ * Initialize checkout session using Supabase RPC
  * @param {string} type Target checkout type (MEMBERSHIP, EVENT, COURSE)
  * @param {string} targetId Database ID of the target plan/event/course
  * @returns {Promise<object>} Checkout details
  */
 export async function createCheckoutSession(type, targetId) {
-  const response = await api.post('/payments/checkout-session', { type, targetId });
-  return response.data;
+  const { data, error } = await supabase.rpc('create_checkout_session', {
+    p_type: type,
+    p_target_id: targetId,
+  });
+
+  if (error) throw new Error(error.message);
+  return data;
 }
 
 /**
- * Send simulated webhook notification to the backend
+ * Send simulated webhook notification to Supabase RPC
  * @param {string} sessionId Checkout Payment ID
  * @param {string} status Transaction outcome status (SUCCESS, FAIL)
  * @returns {Promise<object>} Status result
  */
 export async function simulatedWebhook(sessionId, status) {
-  const response = await api.post('/payments/webhook', { sessionId, status });
-  return response.data;
+  const { data, error } = await supabase.rpc('process_simulated_webhook', {
+    p_session_id: sessionId,
+    p_status: status,
+  });
+
+  if (error) throw new Error(error.message);
+  return data;
 }
 
 /**
@@ -37,8 +53,14 @@ export async function simulatedWebhook(sessionId, status) {
  * @returns {Promise<object>} Session details
  */
 export async function getPaymentSession(id) {
-  const response = await api.get(`/payments/session/${id}`);
-  return response.data;
+  const { data, error } = await supabase
+    .from('Payment')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return { session: data };
 }
 
 /**
@@ -46,8 +68,30 @@ export async function getPaymentSession(id) {
  * @returns {Promise<object>} Transactions array
  */
 export async function getAdminPayments() {
-  const response = await api.get('/payments/admin/payments');
-  return response.data;
+  const { data, error } = await supabase
+    .from('Payment')
+    .select(`
+      *,
+      membership:Membership(
+        *,
+        user:profiles!Membership_userId_fkey(email, firstName, lastName),
+        plan:MembershipPlan(name)
+      ),
+      eventRegistration:EventRegistration(
+        *,
+        user:profiles!EventRegistration_userId_fkey(email, firstName, lastName),
+        event:Event(title)
+      ),
+      courseEnrollment:CourseEnrollment(
+        *,
+        user:profiles!CourseEnrollment_userId_fkey(email, firstName, lastName),
+        course:Course(title)
+      )
+    `)
+    .order('createdAt', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return { payments: data || [] };
 }
 
 /**
@@ -58,6 +102,13 @@ export async function getAdminPayments() {
  * @returns {Promise<object>} Updated record details
  */
 export async function updateMembershipPlan(id, price, description) {
-  const response = await api.patch(`/payments/admin/plans/${id}`, { price, description });
-  return response.data;
+  const { data, error } = await supabase
+    .from('MembershipPlan')
+    .update({ price, description })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return { plan: data };
 }

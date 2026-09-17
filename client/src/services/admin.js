@@ -1,12 +1,13 @@
-import api from './api';
+import supabase from './supabase';
 
 /**
- * Get administrator statistics dashboard details
- * @returns {Promise<object>} Response data containing totalUsers, activeMembers, pendingSubmissions, and revenueTotal
+ * Get administrator statistics dashboard details using Supabase RPC
+ * @returns {Promise<object>} Response data containing stats object
  */
 export async function getStats() {
-  const response = await api.get('/admin/stats');
-  return response.data;
+  const { data, error } = await supabase.rpc('get_admin_dashboard_stats');
+  if (error) throw new Error(error.message);
+  return data;
 }
 
 /**
@@ -17,8 +18,24 @@ export async function getStats() {
  * @returns {Promise<object>} Response data containing users array
  */
 export async function getUsers(params = {}) {
-  const response = await api.get('/admin/users', { params });
-  return response.data;
+  let query = supabase
+    .from('profiles')
+    .select('id, email, firstName, lastName, role, createdAt')
+    .order('createdAt', { ascending: false });
+
+  if (params.role) {
+    query = query.eq('role', params.role);
+  }
+
+  if (params.search) {
+    query = query.or(
+      `email.ilike.%${params.search}%,firstName.ilike.%${params.search}%,lastName.ilike.%${params.search}%`
+    );
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+  return { users: data || [] };
 }
 
 /**
@@ -28,8 +45,33 @@ export async function getUsers(params = {}) {
  * @returns {Promise<object>} Response data
  */
 export async function updateUserRole(id, role) {
-  const response = await api.patch(`/admin/users/${id}/role`, { role });
-  return response.data;
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user?.id === id) {
+    throw new Error('You cannot change your own user role');
+  }
+
+  const { data: updatedUser, error: updateError } = await supabase
+    .from('profiles')
+    .update({ role })
+    .eq('id', id)
+    .select('id, email, firstName, lastName, role')
+    .single();
+
+  if (updateError) throw new Error(updateError.message);
+
+  // Log in AuditLog
+  await supabase.from('AuditLog').insert({
+    userId: session?.user?.id || null,
+    action: 'UPDATE_USER_ROLE',
+    entityType: 'User',
+    entityId: id,
+    details: `Updated role of user ${updatedUser.email} to ${role}`,
+  });
+
+  return {
+    message: 'User role updated successfully',
+    user: updatedUser,
+  };
 }
 
 /**
@@ -37,8 +79,14 @@ export async function updateUserRole(id, role) {
  * @returns {Promise<object>} Response data containing auditLogs array
  */
 export async function getAuditLogs() {
-  const response = await api.get('/admin/audit-logs');
-  return response.data;
+  const { data, error } = await supabase
+    .from('AuditLog')
+    .select('*, user:profiles(email, firstName, lastName)')
+    .order('createdAt', { ascending: false })
+    .limit(100);
+
+  if (error) throw new Error(error.message);
+  return { auditLogs: data || [] };
 }
 
 /**
@@ -46,6 +94,11 @@ export async function getAuditLogs() {
  * @returns {Promise<object>} Response data containing events array
  */
 export async function getAdminEvents() {
-  const response = await api.get('/admin/events');
-  return response.data;
+  const { data, error } = await supabase
+    .from('Event')
+    .select('*, categories:EventCategory!_EventToEventCategory(*)')
+    .order('startDate', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return { events: data || [] };
 }

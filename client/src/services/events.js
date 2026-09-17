@@ -1,4 +1,4 @@
-import api from './api';
+import supabase from './supabase';
 
 /**
  * Fetch all published events with optional query parameters
@@ -6,8 +6,40 @@ import api from './api';
  * @returns {Promise<object>} Response data containing events list
  */
 export async function getEvents(params = {}) {
-  const response = await api.get('/events', { params });
-  return response.data;
+  let query = supabase
+    .from('Event')
+    .select('*, categories:EventCategory!_EventToEventCategory(id, name, slug)')
+    .eq('status', 'PUBLISHED')
+    .order('startDate', { ascending: true });
+
+  if (params.type && params.type !== 'ALL') {
+    query = query.eq('eventType', params.type);
+  }
+
+  if (params.online !== undefined && params.online !== '') {
+    query = query.eq('online', params.online === 'true' || params.online === true);
+  }
+
+  if (params.search) {
+    query = query.or(`title.ilike.%${params.search}%,description.ilike.%${params.search}%`);
+  }
+
+  if (params.upcoming === 'true' || params.upcoming === true) {
+    query = query.gte('endDate', new Date().toISOString());
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+
+  let events = data || [];
+
+  if (params.category) {
+    events = events.filter((e) =>
+      e.categories?.some((c) => c.slug === params.category)
+    );
+  }
+
+  return { events };
 }
 
 /**
@@ -15,8 +47,14 @@ export async function getEvents(params = {}) {
  * @returns {Promise<object>} Response data containing simple events list
  */
 export async function getCalendarEvents() {
-  const response = await api.get('/events/calendar');
-  return response.data;
+  const { data, error } = await supabase
+    .from('Event')
+    .select('id, slug, title, eventType, startDate, endDate, online, location')
+    .eq('status', 'PUBLISHED')
+    .order('startDate', { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return { events: data || [] };
 }
 
 /**
@@ -25,8 +63,29 @@ export async function getCalendarEvents() {
  * @returns {Promise<object>} Response data containing event and registration check flag
  */
 export async function getEventBySlug(slug) {
-  const response = await api.get(`/events/${slug}`);
-  return response.data;
+  const { data: event, error } = await supabase
+    .from('Event')
+    .select('*, categories:EventCategory!_EventToEventCategory(id, name, slug)')
+    .eq('slug', slug)
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  let registered = false;
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user?.id) {
+    const { data: reg } = await supabase
+      .from('EventRegistration')
+      .select('id')
+      .eq('eventId', event.id)
+      .eq('userId', session.user.id)
+      .eq('status', 'REGISTERED')
+      .maybeSingle();
+
+    registered = !!reg;
+  }
+
+  return { event, registered };
 }
 
 /**
@@ -35,8 +94,21 @@ export async function getEventBySlug(slug) {
  * @returns {Promise<object>} Response details
  */
 export async function registerForEvent(id) {
-  const response = await api.post(`/events/${id}/register`);
-  return response.data;
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user?.id) throw new Error('Must be logged in to register for an event');
+
+  const { data, error } = await supabase
+    .from('EventRegistration')
+    .insert({
+      eventId: id,
+      userId: session.user.id,
+      status: 'REGISTERED',
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return { registration: data };
 }
 
 /**
@@ -45,8 +117,22 @@ export async function registerForEvent(id) {
  * @returns {Promise<object>} Response details
  */
 export async function createEvent(eventData) {
-  const response = await api.post('/events', eventData);
-  return response.data;
+  const { categories, ...fields } = eventData;
+
+  const { data, error } = await supabase
+    .from('Event')
+    .insert(fields)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  if (categories && Array.isArray(categories) && categories.length > 0) {
+    const joins = categories.map((catId) => ({ A: data.id, B: catId }));
+    await supabase.from('_EventToEventCategory').insert(joins);
+  }
+
+  return { event: data };
 }
 
 /**
@@ -56,8 +142,26 @@ export async function createEvent(eventData) {
  * @returns {Promise<object>} Response details
  */
 export async function updateEvent(id, eventData) {
-  const response = await api.patch(`/events/${id}`, eventData);
-  return response.data;
+  const { categories, ...fields } = eventData;
+
+  const { data, error } = await supabase
+    .from('Event')
+    .update(fields)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  if (categories && Array.isArray(categories)) {
+    await supabase.from('_EventToEventCategory').delete().eq('A', id);
+    if (categories.length > 0) {
+      const joins = categories.map((catId) => ({ A: id, B: catId }));
+      await supabase.from('_EventToEventCategory').insert(joins);
+    }
+  }
+
+  return { event: data };
 }
 
 /**
@@ -66,6 +170,7 @@ export async function updateEvent(id, eventData) {
  * @returns {Promise<object>} Response message
  */
 export async function deleteEvent(id) {
-  const response = await api.delete(`/events/${id}`);
-  return response.data;
+  const { error } = await supabase.from('Event').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+  return { message: 'Event deleted successfully' };
 }

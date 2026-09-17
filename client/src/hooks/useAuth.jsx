@@ -12,20 +12,32 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Run health-check / fetch profile details on application bootstrap
+  // Run initial session check and listen for auth state changes
   useEffect(() => {
+    let isMounted = true;
+
     async function loadUser() {
       try {
         const data = await getMe();
-        setUser(data.user);
+        if (isMounted) {
+          setUser(data?.user || null);
+        }
       } catch {
-        // Fail silently if access token is missing or expired, meaning user is a guest
-        setUser(null);
+        if (isMounted) {
+          setUser(null);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
+
     loadUser();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   /**

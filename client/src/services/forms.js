@@ -1,4 +1,4 @@
-import api from './api';
+import supabase from './supabase';
 
 /**
  * Fetch dynamic form configuration fields
@@ -6,8 +6,14 @@ import api from './api';
  * @returns {Promise<object>} Response data containing formDefinition
  */
 export async function getFormDefinition(key) {
-  const response = await api.get(`/forms/definitions/${key}`);
-  return response.data;
+  const { data: formDefinition, error } = await supabase
+    .from('FormDefinition')
+    .select('*')
+    .eq('key', key)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return { formDefinition };
 }
 
 /**
@@ -18,8 +24,33 @@ export async function getFormDefinition(key) {
  * @returns {Promise<object>} Submission details
  */
 export async function submitForm(key, email, data) {
-  const response = await api.post(`/forms/submit/${key}`, { email, data });
-  return response.data;
+  // 1. Fetch form definition to validate existence & retrieve ID
+  const { data: formDef, error: defError } = await supabase
+    .from('FormDefinition')
+    .select('id, fields')
+    .eq('key', key)
+    .single();
+
+  if (defError || !formDef) throw new Error('Form definition not found');
+
+  const { data: { session } } = await supabase.auth.getSession();
+  const userId = session?.user?.id || null;
+  const submissionEmail = email || session?.user?.email || null;
+
+  const { data: submission, error: submitError } = await supabase
+    .from('FormSubmission')
+    .insert({
+      formDefinitionId: formDef.id,
+      userId,
+      email: submissionEmail,
+      data,
+      status: 'PENDING',
+    })
+    .select()
+    .single();
+
+  if (submitError) throw new Error(submitError.message);
+  return { submission };
 }
 
 /**
@@ -28,8 +59,21 @@ export async function submitForm(key, email, data) {
  * @returns {Promise<object>} Response details
  */
 export async function submitContactMessage(payload) {
-  const response = await api.post('/forms/contact', payload);
-  return response.data;
+  const { data: message, error } = await supabase
+    .from('ContactMessage')
+    .insert({
+      name: payload.name,
+      email: payload.email,
+      subject: payload.subject,
+      message: payload.message,
+      type: payload.type || 'GENERAL',
+      status: 'UNREAD',
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return { message };
 }
 
 /**
@@ -37,8 +81,13 @@ export async function submitContactMessage(payload) {
  * @returns {Promise<object>} Submissions list array
  */
 export async function getSubmissions() {
-  const response = await api.get('/forms/admin/submissions');
-  return response.data;
+  const { data, error } = await supabase
+    .from('FormSubmission')
+    .select('*, formDefinition:FormDefinition(key, title), user:profiles(firstName, lastName, email)')
+    .order('createdAt', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return { submissions: data || [] };
 }
 
 /**
@@ -48,8 +97,15 @@ export async function getSubmissions() {
  * @returns {Promise<object>} Updated record details
  */
 export async function updateSubmissionStatus(id, status) {
-  const response = await api.patch(`/forms/admin/submissions/${id}/status`, { status });
-  return response.data;
+  const { data, error } = await supabase
+    .from('FormSubmission')
+    .update({ status })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return { submission: data };
 }
 
 /**
@@ -57,8 +113,13 @@ export async function updateSubmissionStatus(id, status) {
  * @returns {Promise<object>} Messages list array
  */
 export async function getContactMessages() {
-  const response = await api.get('/forms/admin/messages');
-  return response.data;
+  const { data, error } = await supabase
+    .from('ContactMessage')
+    .select('*')
+    .order('createdAt', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return { messages: data || [] };
 }
 
 /**
@@ -68,6 +129,13 @@ export async function getContactMessages() {
  * @returns {Promise<object>} Updated record details
  */
 export async function updateContactMessageStatus(id, status) {
-  const response = await api.patch(`/forms/admin/messages/${id}/status`, { status });
-  return response.data;
+  const { data, error } = await supabase
+    .from('ContactMessage')
+    .update({ status })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return { message: data };
 }

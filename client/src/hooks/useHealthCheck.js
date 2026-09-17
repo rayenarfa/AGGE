@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../services/api';
+import supabase from '../services/supabase';
 
 export function useHealthCheck() {
   const [status, setStatus] = useState('checking');
@@ -8,11 +8,23 @@ export function useHealthCheck() {
   useEffect(() => {
     let cancelled = false;
 
-    api
-      .get('/health')
-      .then((response) => {
+    supabase
+      .from('SiteSetting')
+      .select('key')
+      .limit(1)
+      .then(({ error: err }) => {
         if (!cancelled) {
-          setStatus(response.data.status === 'ok' ? 'ok' : 'unknown');
+          if (err) {
+            // Even if table is empty or unseeded, as long as network connected it's ok
+            if (err.code === 'PGRST116' || !err.message.includes('fetch failed')) {
+              setStatus('ok');
+            } else {
+              setStatus('error');
+              setError(err.message);
+            }
+          } else {
+            setStatus('ok');
+          }
         }
       })
       .catch((err) => {
